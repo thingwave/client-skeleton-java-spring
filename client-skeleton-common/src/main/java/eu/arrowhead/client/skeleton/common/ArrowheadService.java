@@ -368,7 +368,7 @@ public class ArrowheadService {
 	 * @throws ArrowheadException when the communication is managed via Gateway Core System and internal server error happened.
 	 * @throws UnavailableServerException when the specified server is not available.
 	 */
-	public <T> ResponseEntity<T> consumeServiceHTTP(final Class<T> responseType, final HttpMethod httpMethod, final String address, final int port, final String serviceUri, final String interfaceName, final String token,
+	public <T> T consumeServiceHTTP(final Class<T> responseType, final HttpMethod httpMethod, final String address, final int port, final String serviceUri, final String interfaceName, final String token,
 								  final Object payload, final String... queryParams) {
 		if (responseType == null) {
 			throw new InvalidParameterException("responseType cannot be null.");
@@ -402,7 +402,8 @@ public class ArrowheadService {
 			uri = Utilities.createURI(protocolStr, address, port, serviceUri, queryParams);
 		}
 		
-		return httpService.sendRequest(uri, httpMethod, responseType, payload);
+		final ResponseEntity<T> response = httpService.sendRequest(uri, httpMethod, responseType, payload);
+		return response.getBody();
 	}
 	
 	//=================================================================================================
