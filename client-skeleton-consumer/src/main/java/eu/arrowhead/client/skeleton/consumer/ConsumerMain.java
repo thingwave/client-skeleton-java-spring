@@ -80,6 +80,6 @@ public class ConsumerMain implements ApplicationRunner {
 		}
     	final Object payload = null; //Can be null if not specified in the description of the service.
     	
-    	final ResponseEntity<Object> consumedService = arrowheadService.consumeServiceHTTP(httpMethod, address, port, serviceUri, interfaceName, token, payload, "testkey", "testvalue");
+    	final ResponseEntity<String> consumedService = arrowheadService.consumeServiceHTTP(String.class, httpMethod, address, port, serviceUri, interfaceName, token, payload, "testkey", "testvalue");
 	}
 }

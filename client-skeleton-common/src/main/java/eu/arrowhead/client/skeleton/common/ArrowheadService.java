@@ -317,6 +317,7 @@ public class ArrowheadService {
 	/**
 	 * Sends a http(s) request with the specified service reachability details.
 	 * 
+	 * @param responseType which represents the expected response body.
 	 * @param httpMethod HttpMethod enum which represents the method how the service is available.
 	 * @param address String value which represents the host where the service is available.
 	 * @param port int value which represents the port where the service is available
@@ -332,8 +333,11 @@ public class ArrowheadService {
 	 * @throws ArrowheadException when the communication is managed via Gateway Core System and internal server error happened.
 	 * @throws UnavailableServerException when the specified server is not available.
 	 */
-	public ResponseEntity<Object> consumeServiceHTTP(final HttpMethod httpMethod, final String address, final int port, final String serviceUri, final String interfaceName, final String token,
-													 final Object payload, final String... queryParams) {
+	public <T> ResponseEntity<T> consumeServiceHTTP(final Class<T> responseType, final HttpMethod httpMethod, final String address, final int port, final String serviceUri, final String interfaceName, final String token,
+								  final Object payload, final String... queryParams) {
+		if (responseType == null) {
+			throw new InvalidParameterException("responseType cannot be null.");
+		}
 		if (httpMethod == null) {
 			throw new InvalidParameterException("httpMethod cannot be null.");
 		}
@@ -363,7 +367,7 @@ public class ArrowheadService {
 			uri = Utilities.createURI(protocolStr, address, port, serviceUri, queryParams);
 		}
 		
-		return httpService.sendRequest(uri, httpMethod, Object.class, payload);
+		return httpService.sendRequest(uri, httpMethod, responseType, payload);
 	}
 	
 	//=================================================================================================
