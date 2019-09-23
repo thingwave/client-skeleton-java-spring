@@ -134,11 +134,9 @@ public class ArrowheadService {
 	 * Sends a http(s) request to the 'echo' end point of the given Arrowhead Core System.
 	 * 
 	 * @param coreSystem CoreSystem enum which represents an Arrowhead Core System
-	 * @return the response received from core system server or null when the specified core system has no public service or it is not known by Service Registry Core System
-	 * @throws ArrowheadException when internal server error happened at Service Registry or at the given core system
-	 * @throws UnavailableServerException when Service Registry Core System or the given core system is not available
+	 * @return true if answer received from core system server and false if not or the specified core system has no public service or it is not known by Service Registry Core System
 	 */
-	public ResponseEntity<String> echoCoreSystem(final CoreSystem coreSystem) {		
+	public boolean echoCoreSystem(final CoreSystem coreSystem) {		
 		String address = null;
 		Integer port = null;
 		String coreUri = null;
@@ -152,14 +150,14 @@ public class ArrowheadService {
 			final List<CoreSystemService> publicServices = getPublicServicesOfCoreSystem(coreSystem);			
 			if (publicServices.isEmpty()) {
 				logger.debug("'{}' core system has no public service.", coreSystem.name());
-				return null;
+				return false;
 				
 			} else {				
 				final ResponseEntity<ServiceQueryResultDTO> srResponse = queryServiceReqistryByCoreService(publicServices.get(0));
 				
 				if (srResponse.getBody().getServiceQueryData().isEmpty()) {
 					logger.debug("'{}' core system not known by Service Registry", coreSystem.name());
-					return null;
+					return false;
 				} else {
 					address = srResponse.getBody().getServiceQueryData().get(0).getProvider().getAddress();
 					port = srResponse.getBody().getServiceQueryData().get(0).getProvider().getPort();
@@ -168,7 +166,13 @@ public class ArrowheadService {
 			}			
 		}
 		
-		return httpService.sendRequest(Utilities.createURI(getUriScheme(), address, port, coreUri + CommonConstants.ECHO_URI), HttpMethod.GET, String.class);
+		try {
+			httpService.sendRequest(Utilities.createURI(getUriScheme(), address, port, coreUri + CommonConstants.ECHO_URI), HttpMethod.GET, String.class);		
+		} catch (final Exception ex) {
+			logger.debug("Exception occured during the {} core system 'echo' request. Message : {}", coreSystem.name(), ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 	
 	//-------------------------------------------------------------------------------------------------

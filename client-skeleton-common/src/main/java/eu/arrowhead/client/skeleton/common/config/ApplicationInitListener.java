@@ -21,8 +21,6 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 
 import eu.arrowhead.client.skeleton.common.ArrowheadService;
@@ -31,7 +29,6 @@ import eu.arrowhead.common.SSLProperties;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
 import eu.arrowhead.common.exception.AuthException;
-import eu.arrowhead.common.exception.UnavailableServerException;
 
 public abstract class ApplicationInitListener {
 
@@ -93,17 +90,11 @@ public abstract class ApplicationInitListener {
 	
 	//-------------------------------------------------------------------------------------------------
 	protected void checkCoreSystemReachability(final CoreSystem coreSystem) {
-		try {			
-			final ResponseEntity<String> response = arrowheadService.echoCoreSystem(coreSystem);
-			
-			if (response != null && response.getStatusCode() == HttpStatus.OK) {
+		if (arrowheadService.echoCoreSystem(coreSystem)) {
 				logger.info("'{}' core system is reachable.", coreSystem.name());
 			} else {
 				logger.info("'{}' core system is NOT reachable.", coreSystem.name());
 			}
-		} catch (final  UnavailableServerException | AuthException ex) {
-			logger.info("'{}' core system is NOT reachable.", coreSystem.name());
-		}
 	}
 	
 	//-------------------------------------------------------------------------------------------------
