@@ -1,6 +1,7 @@
 package eu.arrowhead.client.skeleton.common;
 
 
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -275,6 +276,18 @@ public class ArrowheadService {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
+	/** 
+	 * @return your private key or null when https mode is not enabled
+	 */
+	public PrivateKey getMyPrivateKey() {
+		if (sslProperties.isSslEnabled()) {
+			return (PrivateKey) arrowheadContext.get(CommonConstants.SERVER_PRIVATE_KEY);
+		} else {
+			return null;
+		}
+	}
+	
+	//-------------------------------------------------------------------------------------------------
 	/**
 	 * @return an Orchestration form builder prefilled with your system properties
 	 */
@@ -311,6 +324,28 @@ public class ArrowheadService {
 		}
 		
 		return httpService.sendRequest(Utilities.createURI(getUriScheme(), uri.getAddress(), uri.getPort(), uri.getPath()), HttpMethod.POST, OrchestrationResponseDTO.class, request).getBody();
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	/**
+	 * Sends a http(s) 'orchestration/{systemId}' request to Orchestrator Core System.
+	 * 
+	 * @param systemId long value which represents the required system id path variable
+	 * @return the OrchestrationResponseDTO with all top priority provider from Orchestration Store or null when the orchestration service URI is not known by Arrowhead Context
+	 * @throws AuthException when you are not authorized by Orchestrator Core System
+	 * @throws BadPayloadException when the systemId couldn't be validated by Orchestrator Core System 
+	 * @throws InvalidParameterException when the system is not found by Service Registry Core System
+	 * @throws ArrowheadException when internal server error happened at one of the core system involved in orchestration process 
+	 * @throws UnavailableServerException when one of the core system involved in orchestration process is not available 
+	 */
+	public OrchestrationResponseDTO queryOrchestrationStore(final long systemId) {
+		final CoreServiceUri uri = getCoreServiceUri(CoreSystemService.ORCHESTRATION_SERVICE);
+		if (uri == null) {
+			logger.debug("Orchestration from store couldn't be proceeded due to the following reason: " +  CoreSystemService.ORCHESTRATION_SERVICE.name() + " not known by Arrowhead Context");
+			return null;
+		}
+		
+		return httpService.sendRequest(Utilities.createURI(getUriScheme(), uri.getAddress(), uri.getPort(), uri.getPath() + "/" + systemId), HttpMethod.GET, OrchestrationResponseDTO.class).getBody();
 	}
 	
 	//-------------------------------------------------------------------------------------------------
