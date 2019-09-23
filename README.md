@@ -13,11 +13,11 @@ The project has the following dependencies:
 
 ### Project structure
 
-This is a multi module maven project relying on the [partent `pom.xml`](https://github.com/arrowhead-f/client-java-spring/pom.xml) which lists all the modules and common dependencies.
+This is a multi module maven project relying on the [parent `pom.xml`](https://github.com/arrowhead-f/client-java-spring/pom.xml) which lists all the modules and common dependencies.
 
 * **client-skeleton-common**: a common library module for the other maven modules. Contains all the data transfer objects, an 'ArrowheadService' class with the purpose of easily interacting with the framework and also the common arrowhead dependencies.
 
-* **client-skeleton-consumer**: client skeleton module with the purpose of initianting an orchestration request and consume the service from the chosen provider. This consumer project also contains a simple example about how to orchestrate and consume the service afterward.
+* **client-skeleton-consumer**: client skeleton module with the purpose of initiating an orchestration request and consume the service from the chosen provider. This consumer project also contains a simple example about how to orchestrate and consume the service afterward.
 
 * **client-skeleton-provider**: client skeleton module with the purpose of registrating a specific service into the Service Registry and running a web server where the service is available.
 
