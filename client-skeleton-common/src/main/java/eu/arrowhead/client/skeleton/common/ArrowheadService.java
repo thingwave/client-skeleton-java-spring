@@ -425,13 +425,8 @@ public class ArrowheadService {
 	//-------------------------------------------------------------------------------------------------
 	private List<CoreSystemService> getPublicServicesOfCoreSystem(final CoreSystem coreSystem) {
 		final List<CoreSystemService> publicServices = new ArrayList<>();
-		for (final CoreSystemService coreSystemService : coreSystem.getServices()) {
-			for (final CoreSystemService publicCoreService : CommonConstants.PUBLIC_CORE_SYSTEM_SERVICES) {
-				if (coreSystemService == publicCoreService) {
-					publicServices.add(coreSystemService);
-				}
-			}			
-		}
+		publicServices.addAll(coreSystem.getServices());
+		publicServices.retainAll(CommonConstants.PUBLIC_CORE_SYSTEM_SERVICES);
 		return publicServices;
 	}
 }
