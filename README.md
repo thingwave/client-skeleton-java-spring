@@ -13,7 +13,7 @@ The project has the following dependencies:
 
 ### Project structure
 
-This is a multi module maven project relying on the [parent `pom.xml`](https://github.com/arrowhead-f/client-java-spring/pom.xml) which lists all the modules and common dependencies.
+This is a multi module maven project relying on the [parent `pom.xml`](https://github.com/arrowhead-f/client-java-spring/blob/master/pom.xml) which lists all the modules and common dependencies.
 
 * **client-skeleton-common**: a common library module for the other maven modules. Contains all the data transfer objects, an 'ArrowheadService' class with the purpose of easily interacting with the framework and also the common arrowhead dependencies.
 
