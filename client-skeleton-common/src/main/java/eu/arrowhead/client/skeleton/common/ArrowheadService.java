@@ -180,18 +180,18 @@ public class ArrowheadService {
 	 * Sends a http(s) 'register' request to Service Registry Core System.
 	 * 
 	 * @param request ServiceRegistryRequestDTO which represents the required payload of the http(s) request
-	 * @return the response received from Service Registry Core System
+	 * @return the ServiceRegistryResponseDTO received from Service Registry Core System
 	 * @throws AuthException when you are not authorized by Service Registry Core System
 	 * @throws BadPayloadException when the payload couldn't be validated by Service Registry Core System 
 	 * @throws InvalidParameterException when the payload content couldn't be validated by Service Registry Core System
 	 * @throws ArrowheadException when internal server error happened at Service Registry Core System
 	 * @throws UnavailableServerException when Service Registry Core System is not available
 	 */
-	public ResponseEntity<ServiceRegistryResponseDTO> registerServiceToServiceRegistry(final ServiceRegistryRequestDTO request) {
+	public ServiceRegistryResponseDTO registerServiceToServiceRegistry(final ServiceRegistryRequestDTO request) {
 		final String registerUriStr = CommonConstants.SERVICE_REGISTRY_URI + CommonConstants.OP_SERVICE_REGISTRY_REGISTER_URI;
 		final UriComponents registerUri = Utilities.createURI(getUriScheme(), serviceReqistryAddress, serviceRegistryPort, registerUriStr);
 		
-		return httpService.sendRequest(registerUri, HttpMethod.POST, ServiceRegistryResponseDTO.class, request);
+		return httpService.sendRequest(registerUri, HttpMethod.POST, ServiceRegistryResponseDTO.class, request).getBody();
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -199,22 +199,22 @@ public class ArrowheadService {
 	 * Sends a http(s) 'register' request to Service Registry Core System. In the case of service already registered, then the old service registry entry will be overwritten.  
 	 * 
 	 * @param request ServiceRegistryRequestDTO which represents the required payload of the http(s) request
-	 * @return the response received from Service Registry Core System
+	 * @return the ServiceRegistryResponseDTO received from Service Registry Core System
 	 * @throws AuthException when you are not authorized by Service Registry Core System
 	 * @throws BadPayloadException when the payload couldn't be validated by Service Registry Core System 
 	 * @throws InvalidParameterException when the payload content couldn't be validated by Service Registry Core System
 	 * @throws ArrowheadException when internal server error happened at Service Registry Core System
 	 * @throws UnavailableServerException when Service Registry Core System is not available
 	 */
-	public ResponseEntity<ServiceRegistryResponseDTO> forceRegisterServiceToServiceRegistry(final ServiceRegistryRequestDTO request) {
+	public ServiceRegistryResponseDTO forceRegisterServiceToServiceRegistry(final ServiceRegistryRequestDTO request) {
 		final String registerUriStr = CommonConstants.SERVICE_REGISTRY_URI + CommonConstants.OP_SERVICE_REGISTRY_REGISTER_URI;
 		final UriComponents registerUri = Utilities.createURI(getUriScheme(), serviceReqistryAddress, serviceRegistryPort, registerUriStr);
 		
 		try {			
-			return httpService.sendRequest(registerUri, HttpMethod.POST, ServiceRegistryResponseDTO.class, request);
+			return httpService.sendRequest(registerUri, HttpMethod.POST, ServiceRegistryResponseDTO.class, request).getBody();
 		} catch (final InvalidParameterException ex) {
 			unregisterServiceFromServiceRegistry(request.getServiceDefinition());
-			return httpService.sendRequest(registerUri, HttpMethod.POST, ServiceRegistryResponseDTO.class, request);
+			return httpService.sendRequest(registerUri, HttpMethod.POST, ServiceRegistryResponseDTO.class, request).getBody();
 		}	
 	}
 	
@@ -223,14 +223,13 @@ public class ArrowheadService {
 	 * Sends a http(s) 'unregister' request to Service Registry Core System.
 	 * 
 	 * @param serviceDefinition String value which represents the service being deleted from service registry
-	 * @return the response received from Service Registry Core System
 	 * @throws AuthException when you are not authorized by Service Registry Core System
 	 * @throws BadPayloadException when the payload couldn't be validated by Service Registry Core System 
 	 * @throws InvalidParameterException when the payload content couldn't be validated by Service Registry Core System
 	 * @throws ArrowheadException when internal server error happened at Service Registry Core System
 	 * @throws UnavailableServerException when Service Registry Core System is not available
 	 */
-	public ResponseEntity<Void> unregisterServiceFromServiceRegistry(final String serviceDefinition) {
+	public void unregisterServiceFromServiceRegistry(final String serviceDefinition) {
 		final String unregisterUriStr = CommonConstants.SERVICE_REGISTRY_URI + CommonConstants.OP_SERVICE_REGISTRY_UNREGISTER_URI;
 		final MultiValueMap<String,String> queryMap = new LinkedMultiValueMap<>(4);
 		queryMap.put(CommonConstants.OP_SERVICE_REGISTRY_UNREGISTER_REQUEST_PARAM_PROVIDER_SYSTEM_NAME, List.of(clientSystemName));
@@ -239,7 +238,7 @@ public class ArrowheadService {
 		queryMap.put(CommonConstants.OP_SERVICE_REGISTRY_UNREGISTER_REQUEST_PARAM_SERVICE_DEFINITION, List.of(serviceDefinition));
 		final UriComponents unregisterUri = Utilities.createURI(getUriScheme(), serviceReqistryAddress, serviceRegistryPort, queryMap, unregisterUriStr);
 		
-		return httpService.sendRequest(unregisterUri, HttpMethod.DELETE, Void.class);
+		httpService.sendRequest(unregisterUri, HttpMethod.DELETE, Void.class);
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -297,21 +296,21 @@ public class ArrowheadService {
 	 * Sends a http(s) 'orchestration' request to Orchestrator Core System.
 	 * 
 	 * @param request OrchestrationFormRequestDTO which represents the required payload of the http(s) request
-	 * @return the response received from Orchestrator Core System
+	 * @return the OrchestrationResponseDTO received from Orchestrator Core System or null when the orchestration service URI is not known by Arrowhead Context
 	 * @throws AuthException when you are not authorized by Orchestrator Core System
 	 * @throws BadPayloadException when the payload couldn't be validated by Orchestrator Core System 
 	 * @throws InvalidParameterException when the payload content couldn't be validated by Orchestrator Core System
 	 * @throws ArrowheadException when internal server error happened at one of the core system involved in orchestration process 
 	 * @throws UnavailableServerException when one of the core system involved in orchestration process is not available 
 	 */
-	public ResponseEntity<OrchestrationResponseDTO> proceedOrchestration(final OrchestrationFormRequestDTO request) {
+	public OrchestrationResponseDTO proceedOrchestration(final OrchestrationFormRequestDTO request) {
 		final CoreServiceUri uri = getCoreServiceUri(CoreSystemService.ORCHESTRATION_SERVICE);
 		if (uri == null) {
 			logger.debug("Orchestration couldn't be proceeded due to the following reason: " +  CoreSystemService.ORCHESTRATION_SERVICE.name() + " not known by Arrowhead Context");
 			return null;
 		}
 		
-		return httpService.sendRequest(Utilities.createURI(getUriScheme(), uri.getAddress(), uri.getPort(), uri.getPath()), HttpMethod.POST, OrchestrationResponseDTO.class, request);
+		return httpService.sendRequest(Utilities.createURI(getUriScheme(), uri.getAddress(), uri.getPort(), uri.getPath()), HttpMethod.POST, OrchestrationResponseDTO.class, request).getBody();
 	}
 	
 	//-------------------------------------------------------------------------------------------------

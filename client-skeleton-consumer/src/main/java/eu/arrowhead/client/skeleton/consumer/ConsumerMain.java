@@ -56,14 +56,14 @@ public class ConsumerMain implements ApplicationRunner {
     	
     	OrchestrationResponseDTO response = null;
     	try {
-    		response = arrowheadService.proceedOrchestration(orchestrationRequest).getBody();			
+    		response = arrowheadService.proceedOrchestration(orchestrationRequest);			
 		} catch (final ArrowheadException ex) {
 			//Handle the unsuccessful request as you wish!
 		}
     	
     	//EXAMPLE OF CONSUMING THE SERVICE FROM A CHOSEN PROVIDER
     	
-    	if (response.getResponse().isEmpty()) {
+    	if (response == null || response.getResponse().isEmpty()) {
     		//If no proper providers found during the orchestration process, then the response list will be empty. Handle the case as you wish!
     	}
     	
