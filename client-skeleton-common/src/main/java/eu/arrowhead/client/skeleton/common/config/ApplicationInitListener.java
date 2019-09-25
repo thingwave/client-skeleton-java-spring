@@ -91,10 +91,10 @@ public abstract class ApplicationInitListener {
 	//-------------------------------------------------------------------------------------------------
 	protected void checkCoreSystemReachability(final CoreSystem coreSystem) {
 		if (arrowheadService.echoCoreSystem(coreSystem)) {
-				logger.info("'{}' core system is reachable.", coreSystem.name());
-			} else {
-				logger.info("'{}' core system is NOT reachable.", coreSystem.name());
-			}
+			logger.info("'{}' core system is reachable.", coreSystem.name());
+		} else {
+			logger.info("'{}' core system is NOT reachable.", coreSystem.name());
+		}
 	}
 	
 	//-------------------------------------------------------------------------------------------------

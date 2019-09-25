@@ -142,32 +142,33 @@ public class ArrowheadService {
 		Integer port = null;
 		String coreUri = null;
 		
-		if (coreSystem == CoreSystem.SERVICE_REGISTRY) {
-			address = serviceReqistryAddress;
-			port = serviceRegistryPort;
-			coreUri = CommonConstants.SERVICE_REGISTRY_URI;
-			
-		} else {			
-			final List<CoreSystemService> publicServices = getPublicServicesOfCoreSystem(coreSystem);			
-			if (publicServices.isEmpty()) {
-				logger.debug("'{}' core system has no public service.", coreSystem.name());
-				return false;
-				
-			} else {				
-				final ResponseEntity<ServiceQueryResultDTO> srResponse = queryServiceReqistryByCoreService(publicServices.get(0));
-				
-				if (srResponse.getBody().getServiceQueryData().isEmpty()) {
-					logger.debug("'{}' core system not known by Service Registry", coreSystem.name());
-					return false;
-				} else {
-					address = srResponse.getBody().getServiceQueryData().get(0).getProvider().getAddress();
-					port = srResponse.getBody().getServiceQueryData().get(0).getProvider().getPort();
-					coreUri = publicServices.get(0).getServiceUri().split("/")[1];
-				}				
-			}			
-		}
-		
 		try {
+			
+			if (coreSystem == CoreSystem.SERVICE_REGISTRY) {
+				address = serviceReqistryAddress;
+				port = serviceRegistryPort;
+				coreUri = CommonConstants.SERVICE_REGISTRY_URI;
+				
+			} else {			
+				final List<CoreSystemService> publicServices = getPublicServicesOfCoreSystem(coreSystem);			
+				if (publicServices.isEmpty()) {
+					logger.debug("'{}' core system has no public service.", coreSystem.name());
+					return false;
+					
+				} else {				
+					final ResponseEntity<ServiceQueryResultDTO> srResponse = queryServiceReqistryByCoreService(publicServices.get(0));
+					
+					if (srResponse.getBody().getServiceQueryData().isEmpty()) {
+						logger.debug("'{}' core system not known by Service Registry", coreSystem.name());
+						return false;
+					} else {
+						address = srResponse.getBody().getServiceQueryData().get(0).getProvider().getAddress();
+						port = srResponse.getBody().getServiceQueryData().get(0).getProvider().getPort();
+						coreUri = publicServices.get(0).getServiceUri().split("/")[1];
+					}				
+				}			
+			}
+		
 			httpService.sendRequest(Utilities.createURI(getUriScheme(), address, port, coreUri + CommonConstants.ECHO_URI), HttpMethod.GET, String.class);		
 		} catch (final Exception ex) {
 			logger.debug("Exception occured during the {} core system 'echo' request. Message : {}", coreSystem.name(), ex.getMessage());
