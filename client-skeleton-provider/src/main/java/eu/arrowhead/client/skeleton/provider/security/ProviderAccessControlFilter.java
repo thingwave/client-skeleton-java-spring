@@ -10,7 +10,7 @@ import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.security.AccessControlFilter;
 
 @Component
-@ConditionalOnExpression(CommonConstants.$SERVER_SSL_ENABLED_WD + " and " + ClientCommonConstants.$TOKEN_SECURITY_FILTER_DISABLED)
+@ConditionalOnExpression(CommonConstants.$SERVER_SSL_ENABLED_WD + " and !" + ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 public class ProviderAccessControlFilter extends AccessControlFilter {
 	
 	@Override
