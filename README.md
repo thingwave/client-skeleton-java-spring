@@ -1,4 +1,4 @@
-# Arrowhead Client Skeletons (Java Sprint-Boot)
+# Arrowhead Client Skeletons (Java Spring-Boot)
 ##### The project provides client skeletons for the Arrowhead Framework 4.1.3
 
 These skeletons are to be extended with your own application code.
