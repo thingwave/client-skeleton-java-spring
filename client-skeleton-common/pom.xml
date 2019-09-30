@@ -12,6 +12,11 @@
 	<name>Arrowhead Client Skeleton</name>
 	<description>Common resources for Arrowhead Clients</description>
 	
+	<properties>
+  		<client.library>client-library</client.library>
+  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	</properties>
+	
 	<repositories>
 		<repository>
 			<id>arrowhead-client</id>
@@ -28,6 +33,14 @@
 	</dependencies>
 	
 	<build>
+	
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+	
 		<plugins>
 			<plugin>
     			<groupId>org.springframework.boot</groupId>
@@ -35,8 +48,33 @@
     			<configuration>
           			<skip>true</skip>
     			</configuration>
-  			</plugin>  			
+  			</plugin>
   			
+  			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+	  			<artifactId>maven-shade-plugin</artifactId>
+	  			<executions>
+	  				<execution>
+	  					<phase>package</phase>
+	  					<goals>
+	  						<goal>shade</goal>
+	  					</goals>
+			  			<configuration>
+							<shadedArtifactAttached>false</shadedArtifactAttached>
+             				<finalName>${client.library}</finalName>
+             				<shadeSourcesContent>true</shadeSourcesContent>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<minimizeJar>false</minimizeJar>
+							<artifactSet>
+								<includes>
+									<include>eu.arrowhead:core-client-skeleton</include>
+									<include>eu.arrowhead:client-skeleton-common</include>
+								</includes>
+							</artifactSet>
+						</configuration>	
+	  				</execution>
+	  			</executions>
+  			</plugin>  			
   		</plugins>
   	</build>	
 </project>
