@@ -15,7 +15,7 @@
 	<repositories>
 		<repository>
 			<id>arrowhead-client</id>
-			<url>https://github.com/arrowhead-f/client-java-spring/tree/master/client-mvn-repo</url>
+			<url>https://github.com/arrowhead-f/client-java-spring/raw/master/client-mvn-repo</url>
 		</repository>
 	</repositories>
 	
