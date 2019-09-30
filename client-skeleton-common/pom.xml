@@ -12,11 +12,6 @@
 	<name>Arrowhead Client Skeleton</name>
 	<description>Common resources for Arrowhead Clients</description>
 	
-	<properties>
-  		<client.library>client-library</client.library>
-  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  	</properties>
-	
 	<repositories>
 		<repository>
 			<id>arrowhead-client</id>
@@ -32,8 +27,7 @@
 		</dependency>
 	</dependencies>
 	
-	<build>
-	
+	<build>	
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
@@ -50,31 +44,25 @@
     			</configuration>
   			</plugin>
   			
-  			<plugin>
-  				<groupId>org.apache.maven.plugins</groupId>
-	  			<artifactId>maven-shade-plugin</artifactId>
-	  			<executions>
-	  				<execution>
-	  					<phase>package</phase>
-	  					<goals>
-	  						<goal>shade</goal>
-	  					</goals>
-			  			<configuration>
-							<shadedArtifactAttached>false</shadedArtifactAttached>
-             				<finalName>${client.library}</finalName>
-             				<shadeSourcesContent>true</shadeSourcesContent>
-							<createDependencyReducedPom>false</createDependencyReducedPom>
-							<minimizeJar>false</minimizeJar>
-							<artifactSet>
-								<includes>
-									<include>eu.arrowhead:core-client-skeleton</include>
-									<include>eu.arrowhead:client-skeleton-common</include>
-								</includes>
-							</artifactSet>
-						</configuration>	
-	  				</execution>
-	  			</executions>
-  			</plugin>  			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>assembly.xml</descriptor>
+					</descriptors>	
+					<finalName>client-library</finalName>
+					<appendAssemblyId>false</appendAssemblyId>	
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
   		</plugins>
   	</build>	
 </project>
