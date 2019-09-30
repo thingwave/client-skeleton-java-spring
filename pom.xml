@@ -84,39 +84,6 @@
 	<build>
 		<plugins>
 			<plugin>
-		      		<groupId>org.apache.maven.plugins</groupId>
-		      		<artifactId>maven-dependency-plugin</artifactId>
-		      		<executions>
-		      			<execution>
-		      				<id>purge</id>
-		      				<phase>clean</phase>
-		      				<goals>
-		      					<goal>purge-local-repository</goal>
-		      				</goals>
-		      				<configuration>
-		      					<includes>
-		      						<include>eu.arrowhead:core-client</include>
-		      					</includes>		      					
-		      					<actTransitively>false</actTransitively>
-		      					<reResolve>false</reResolve>
-		      				</configuration>
-		      			</execution>
-		      			
-		      			<execution>
-		      				<id>source</id>
-		      				<phase>package</phase>
-		      				<goals>
-		      					<goal>sources</goal>
-		      				</goals>
-		      				<configuration>
-		      					<classifier>sources</classifier>
-		      					<includeArtifactIds>core-client</includeArtifactIds>
-		      				</configuration>
-		      			</execution>
-		      		</executions>
-		      	</plugin>
-		
-			<plugin>
     			<groupId>org.springframework.boot</groupId>
     			<artifactId>spring-boot-maven-plugin</artifactId>
   			</plugin>  			  			
