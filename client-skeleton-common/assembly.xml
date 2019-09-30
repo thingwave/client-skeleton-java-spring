@@ -6,8 +6,9 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<dependencySets>
 		<dependencySet>
-			<useProjectArtifact>false</useProjectArtifact>
-			<unpack>false</unpack>
+		<useProjectArtifact>false</useProjectArtifact>
+			<outputDirectory></outputDirectory>
+			<unpack>true</unpack>
 			<scope>runtime</scope>
 			<includes>
 				<include>eu.arrowhead:core-client-skeleton</include>
@@ -16,6 +17,7 @@
 	</dependencySets>
 	<fileSets>
 		<fileSet>
+			<outputDirectory></outputDirectory>
 			<directory>${project.build.outputDirectory}</directory>
 		</fileSet>
 	</fileSets>
