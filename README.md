@@ -1,7 +1,10 @@
 # Arrowhead Client Skeletons (Java Spring-Boot)
 ##### The project provides client skeletons for the Arrowhead Framework 4.1.3
 
-These skeletons are to be extended with your own application code.
+### How to use client skeletons?
+
+* Refer the `client-library-${version}` located in `client-mvn-repo` folder as a dependency in your project, or
+* Fork this repo and extend the skeletons with your own application code
 
 ### Requirements
 
