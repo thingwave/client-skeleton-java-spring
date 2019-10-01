@@ -3,8 +3,7 @@
 
 ### How to use client skeletons?
 
-* Refer the `client-library-${version}` located in `client-mvn-repo` folder as a dependency in your project, or
-* Fork this repo and extend the skeletons with your own application code
+Fork this repo and extend the skeletons with your own application code
 
 ### Requirements
 
@@ -14,9 +13,7 @@ The project has the following dependencies:
 
 ### Project structure
 
-This is a multi module maven project relying on the [parent `pom.xml`](https://github.com/arrowhead-f/client-java-spring/blob/master/pom.xml) which lists all the modules and common dependencies.
-
-* **client-skeleton-common**: a common library module for the other maven modules. Contains all the data transfer objects, an 'ArrowheadService' class with the purpose of easily interacting with the framework and also the common arrowhead dependencies.
+This is a multi module maven project relying on the [parent `pom.xml`](https://github.com/arrowhead-f/client-skeleton-java-spring/blob/master/pom.xml) which lists all the modules and common dependencies.
 
 * **client-skeleton-consumer**: client skeleton module with the purpose of initiating an orchestration request and consume the service from the chosen provider. This consumer project also contains a simple example about how to orchestrate and consume the service afterward.
 
