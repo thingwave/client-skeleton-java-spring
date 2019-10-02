@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-import eu.arrowhead.client.skeleton.common.config.DefaultSecurityConfig;
+import eu.arrowhead.client.library.config.DefaultSecurityConfig;
 
 @Configuration
 @ConditionalOnWebApplication
