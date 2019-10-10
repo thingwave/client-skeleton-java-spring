@@ -7,6 +7,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
+import java.util.Base64;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,9 +20,12 @@ import org.springframework.stereotype.Component;
 import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.config.ApplicationInitListener;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
+import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
 import eu.arrowhead.client.skeleton.subscriber.security.SubscriberSecurityConfig;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
+import eu.arrowhead.common.dto.shared.SubscriptionRequestDTO;
+import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 
 @Component
@@ -33,10 +38,23 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 	private ArrowheadService arrowheadService;
 	
 	@Autowired
-	private SubscriberSecurityConfig providerSecurityConfig;
+	private SubscriberSecurityConfig subscriberSecurityConfig;
 	
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
+	
+	@Value("#{'${preset_events}'.split(',')}")
+	//@Value("${default_events:#{null}}")
+	private List<String> defaultEvents;
+	
+	@Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
+	private String clientSystemName;
+	
+	@Value(ClientCommonConstants.$CLIENT_SERVER_ADDRESS_WD)
+	private String clientSystemAddress;
+	
+	@Value(ClientCommonConstants.$CLIENT_SERVER_PORT_WD)
+	private int clientSystemPort;
 	
 	private final Logger logger = LogManager.getLogger(SubscriberApplicationInitListener.class);
 	
@@ -57,6 +75,9 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 		}		
 		
 		setTokenSecurityFilter();
+		
+		arrowheadService.updateCoreServiceURIs(CoreSystem.EVENT_HANDLER);	
+		subscribeToDefaultEvents();
 		
 		//TODO: implement here any custom behavior on application start up
 	}
@@ -87,10 +108,41 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 			} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
 				throw new ArrowheadException(ex.getMessage());
 			}			
-			final PrivateKey providerPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
+			final PrivateKey subscriberPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
 
-			providerSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
-			providerSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(providerPrivateKey);
+			subscriberSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
+			subscriberSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(subscriberPrivateKey);
+		}
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	private void subscribeToDefaultEvents() {
+		if( defaultEvents == null) {
+			
+			logger.info("No default events to subscribe.");
+		} else {
+			
+			final SystemRequestDTO subscriber = new SystemRequestDTO();
+			subscriber.setSystemName( clientSystemName );
+			subscriber.setAddress( clientSystemAddress );
+			subscriber.setPort( clientSystemPort );
+			subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );
+			
+			for (final String eventType : defaultEvents) {
+				
+				final SubscriptionRequestDTO subscription = new SubscriptionRequestDTO(
+						eventType.toUpperCase(), 
+						subscriber, 
+						null, 
+						SubscriberConstants.EVENT_NOTIFICATION_URI, 
+						false, 
+						null, 
+						null, 
+						null);
+				
+				arrowheadService.subscribeToEventHandler( subscription );
+				
+			}
 		}
 	}
 }

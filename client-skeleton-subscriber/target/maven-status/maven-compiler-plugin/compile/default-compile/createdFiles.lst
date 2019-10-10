@@ -1,0 +1,6 @@
+eu\arrowhead\client\skeleton\subscriber\controller\SubscriberController.class
+eu\arrowhead\client\skeleton\subscriber\SubscriberApplicationInitListener.class
+eu\arrowhead\client\skeleton\subscriber\SubscriberMain.class
+eu\arrowhead\client\skeleton\subscriber\security\SubscriberTokenSecurityFilter.class
+eu\arrowhead\client\skeleton\subscriber\security\SubscriberAccessControlFilter.class
+eu\arrowhead\client\skeleton\subscriber\security\SubscriberSecurityConfig.class
