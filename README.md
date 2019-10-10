@@ -30,5 +30,5 @@ Both client skeleton have a default 'ApplicationInitListener' and a defult 'Secu
 ##### (1st) apllicaction.properties
 Location: `src/main/resources`
 * decide the required security level and set the `server.ssl.enabled` and `token.security.filter.enabled` properties accordingly.
-* create your own client certificate (or for demo porpuse use the provided one) and update the further `server.ssl...` properties accordingly. * *(**Note** that `server.ssl.key-store-password` and `server.ssl.key-password` must be the same.)* *
-* change the `client_system_name` property to your system name. * *(**Note** that it should be in with your client certificate common name)* *
+* create your own client certificate (or for demo porpuse use the provided one) and update the further `server.ssl...` properties accordingly. *(**Note** that `server.ssl.key-store-password` and `server.ssl.key-password` must be the same.)*
+* change the `client_system_name` property to your system name. *(**Note** that it should be in line with your certificate common name e.g.: when your certificate common name is `my_awesome_client.my_cloud.my_company.arrowhed.eu`, then your system name is  `my_awesome_client`)*
