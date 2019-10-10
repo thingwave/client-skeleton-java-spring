@@ -27,6 +27,7 @@ import eu.arrowhead.common.core.CoreSystem;
 import eu.arrowhead.common.dto.shared.SubscriptionRequestDTO;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
+import eu.arrowhead.common.exception.InvalidParameterException;
 
 @Component
 public class SubscriberApplicationInitListener extends ApplicationInitListener {
@@ -78,7 +79,6 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 		
 		arrowheadService.updateCoreServiceURIs(CoreSystem.EVENT_HANDLER);	
 		subscribeToDefaultEvents();
-		
 		//TODO: implement here any custom behavior on application start up
 	}
 	
@@ -114,7 +114,7 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 			subscriberSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(subscriberPrivateKey);
 		}
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------
 	private void subscribeToDefaultEvents() {
 		if( defaultEvents == null) {
@@ -130,6 +130,12 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 			
 			for (final String eventType : defaultEvents) {
 				
+				arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
+				
+			}
+			
+			for (final String eventType : defaultEvents) {
+				
 				final SubscriptionRequestDTO subscription = new SubscriptionRequestDTO(
 						eventType.toUpperCase(), 
 						subscriber, 
@@ -140,7 +146,19 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 						null, 
 						null);
 				
-				arrowheadService.subscribeToEventHandler( subscription );
+				try {
+					arrowheadService.subscribeToEventHandler( subscription );
+				
+				} catch ( InvalidParameterException ex) {
+					
+					if( ex.getMessage().contains( "Subscription violates uniqueConstraint rules" )) {
+						
+						logger.debug("Subscription is allready in DB");
+					}
+				}  catch ( Exception ex) {
+					
+					logger.debug("Could not subscribe to EventType: " + subscription.getEventType());
+				} 
 				
 			}
 		}
