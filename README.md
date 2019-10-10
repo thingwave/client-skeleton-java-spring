@@ -24,3 +24,11 @@ This is a multi module maven project relying on the [parent `pom.xml`](https://g
 Skeletons are built on the [`Arrowhead Client Library`](https://github.com/arrowhead-f/client-library-java-spring) which is also imported to this project as a maven dependency. The client library provides the `ArrowheadService.class` which is a singleton spring managed bean and designed with the purpose of interacting with Arrowhead Framework. Use its methods by [autowiring](https://www.baeldung.com/spring-autowire) into your spring managed custom classes or use `ArrowheadBeans.getArrowheadService()` if your custom class is not spring managed.
 
 Both client skeleton have a default 'ApplicationInitListener' and a defult 'SecurityConfig' what you can change or extend. The essential configuration has to be managed by customizing the `application.properties` file, located in `src/main/resources` folder.
+
+### Best practices to start with the skeletons
+
+##### (1st) apllicaction.properties
+Location: `src/main/resources`
+* decide the required security level and set the `server.ssl.enabled` and `token.security.filter.enabled` properties accordingly.
+* create your own client certificate (or for demo porpuse use the provided one) and update the further `server.ssl...` properties accordingly. * *(**Note** that `server.ssl.key-store-password` and `server.ssl.key-password` must be the same.)* *
+* change the `client_system_name` property to your system name. * *(**Note** that it should be in with your client certificate common name)* *
