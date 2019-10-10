@@ -68,3 +68,5 @@ Recommended Provider start-up logics:
 
 Recommended Provider shutdown logics:
 * Unregistering the service from Service Registry Core System. *(**Hint:** Use the `unregisterServiceFromServiceRegistry()` method from `ArrowheadService.class`.)*
+
+##### Check [`sos-examples-spring`](https://github.com/arrowhead-f/sos-examples-spring) repository for full demo client implementations.
