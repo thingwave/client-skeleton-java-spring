@@ -62,5 +62,9 @@ Already implemented Provider start-up logics:
 * Checking the Authorization Core System reachability if SSL enabled. *(Sends an 'echo' request to the server.)*
 * Turning on the token security filter if it is enabled.
 * Querying and storing the 'public-key' service URI of Authorization Core System if token security filter is enabled. *(Sends a 'query' request to the Service Registry.)*
+
 Recommended Provider start-up logics:
 * Registering the provided service into the Service Registry Core System. *(**Hint:** Use the `forceRegisterServiceToServiceRegistry()` method from `ArrowheadService.class`. It removes your current service registry entry from the database and register again, so it ensures that if your service interfaces or the meta data have been changed, then the freshest condition will be published.)*
+
+Recommended Provider shutdown logics:
+* Unregistering the service from Service Registry Core System. *(**Hint:** Use the `unregisterServiceFromServiceRegistry()` method from `ArrowheadService.class`.)*
