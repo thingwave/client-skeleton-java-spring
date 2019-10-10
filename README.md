@@ -50,10 +50,14 @@ The skeletons provide a built-in arrowhed framework compatible security configur
 
 ##### (4th) start-up & shutdown configuration
 The skeletons provide a built-in application start-up and shutdown configuration located in `eu.arrowhead.client.skeleton.consumer|provider` package.
-* The `ConsumerApplicationInitListener.class` and the `ProviderApplicationInitListener.class` contains the `customInit()` method which is executed automatically right after the application start-up and also the `customDestroy()` method which is executed automatically right after triggering the application shutdown, but still before the final stop. *(**Look for the 'TODO' marks** within this classes if you want to implement additional logics.)*
+The `ConsumerApplicationInitListener.class` and the `ProviderApplicationInitListener.class` contains the `customInit()` method which is executed automatically right after the application start-up and also the `customDestroy()` method which is executed automatically right after triggering the application shutdown, but still before the final stop. *(**Look for the 'TODO' marks** within this classes if you want to implement additional logics.)*
 
-  Alredy implemented start-up Consumer logics:
-  * Checking the Service Registry Core System reachability. *(Sends an 'echo' request to the server.)*
-  * Checking the Orchestrator Core System reachability. *(Sends an 'echo' request to the server.)*
-  * Querying and storing the public service URIs of Orchestrator Core System. *(Sends an 'echo' request to the server.)*
-  
+Already implemented Consumer start-up logics:
+* Checking the Service Registry Core System reachability. *(Sends an 'echo' request to the server.)*
+* Checking the Orchestrator Core System reachability. *(Sends an 'echo' request to the server.)*
+* Querying and storing the public service URIs of Orchestrator Core System. *(Sends a 'query' request to the Service Registry.)*
+
+Already implemented Provider start-up logics:
+* Checking the Service Registry Core System reachability. *(Sends an 'echo' request to the server.)*
+* Checking the Authorization Core System reachability if SSL enabled. *(Sends an 'echo' request to the server.)*
+* Querying and storing the 'public-key' service URI of Authorization Core System if token security filter is enabled. *(Sends a 'query' request to the Service Registry.)*
