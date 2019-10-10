@@ -35,3 +35,6 @@ Location: `src/main/resources`
 * Adjust the Service Registry Core System location by the `sr_address` and `sr_port` properties.
 * In case of a provider you have to set it's web-server parameters by the `server.address` and `server.port` properties.
 * In case of a consumer decide whether it should act as a web-server or not. If yes, then set the `spring.main.web-application-type` to 'servlet' and set the further server parameters like in the provider case. If not just left these properties untouched.
+
+##### (2nd) package structure
+All the provided skeleton classes are located in the child packages of `eu.arrowhead` base package. You can create your own classes  under this base package or you can create your own packages like `com.my_company.my_awesome_project` to organize the skeleton and the application code separated. In the latter case if you wish to use spring beans at your custom packages, then you have to let spring framework known about your base package(s). This can be managed by adding the base package name(s) as a string value(s) in the `@ComponentScan` annotaion of the application's `Main.class` *(**Look for the 'TODO' mark** within the main class).
