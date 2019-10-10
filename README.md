@@ -3,7 +3,7 @@
 
 ### How to use client skeletons?
 
-Fork this repo and extend the skeletons with your own application code. ([chek the best practice recommendations](https://github.com/arrowhead-f/client-skeleton-java-spring/blob/development/README.md#best-practices-to-start-with-the-skeletons))
+Fork this repo and extend the skeletons with your own application code. ([check the best practice recommendations](https://github.com/arrowhead-f/client-skeleton-java-spring/blob/development/README.md#best-practices-to-start-with-the-skeletons))
 
 ### Requirements
 
