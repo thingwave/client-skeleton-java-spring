@@ -11,7 +11,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 
 import eu.arrowhead.client.library.ArrowheadService;
-import eu.arrowhead.client.skeleton.subscriber.SubscriberApplicationInitListener;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.dto.shared.OrchestrationFlags.Flag;
 import eu.arrowhead.common.dto.shared.OrchestrationFormRequestDTO;
