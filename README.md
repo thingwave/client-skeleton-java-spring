@@ -59,9 +59,9 @@ Already implemented Consumer start-up logics:
 
 Already implemented Provider start-up logics:
 * Checking the Service Registry Core System reachability. *(Sends an 'echo' request to the server.)*
-* Checking the Authorization Core System reachability if SSL enabled. *(Sends an 'echo' request to the server.)*
-* Turning on the token security filter if it is enabled.
+* Checking the Authorization Core System reachability if 'TokenSecurityFilter' enabled. *(Sends an 'echo' request to the server.)*
 * Querying and storing the 'public-key' service URI of Authorization Core System if token security filter is enabled. *(Sends a 'query' request to the Service Registry.)*
+* Turning on the token security filter if it is enabled.
 
 Recommended Provider start-up logics:
 * Registering the provided service into the Service Registry Core System. *(**Hint:** Use the `forceRegisterServiceToServiceRegistry()` method from `ArrowheadService.class`. It removes your current service registry entry from the database and register again, so it ensures that if your service interfaces or the meta data have been changed, then the freshest condition will be published.)*
