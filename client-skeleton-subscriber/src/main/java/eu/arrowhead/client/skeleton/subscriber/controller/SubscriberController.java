@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
@@ -29,9 +30,13 @@ public class SubscriberController {
 	
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(path = SubscriberConstants.EVENT_NOTIFICATION_URI)
-	public void receiveEvent( final EventDTO event ) {
+	public void receiveEvent(@RequestBody final EventDTO event ) {
 		
 		logger.debug("Received event");
+		if( event.getEventType() == null) {
+			
+			logger.debug( "EventType is null." );
+		}
 	}
 	
 	//-------------------------------------------------------------------------------------------------

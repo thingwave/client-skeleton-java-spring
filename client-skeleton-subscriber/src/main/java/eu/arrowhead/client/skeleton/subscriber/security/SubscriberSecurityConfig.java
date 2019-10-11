@@ -30,7 +30,7 @@ public class SubscriberSecurityConfig extends DefaultSecurityConfig {
 		super.configure(http);
 		if (tokenSecurityFilterEnabled) {
 			tokenSecurityFilter = new SubscriberTokenSecurityFilter();
-			http.addFilterAfter(tokenSecurityFilter, SecurityContextHolderAwareRequestFilter.class);			
+		http.addFilterAfter(tokenSecurityFilter, SecurityContextHolderAwareRequestFilter.class);			
 		}
 	}
 

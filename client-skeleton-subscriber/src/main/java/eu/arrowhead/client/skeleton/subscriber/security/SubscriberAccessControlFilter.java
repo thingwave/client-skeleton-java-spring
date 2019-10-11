@@ -13,10 +13,10 @@ import eu.arrowhead.common.security.AccessControlFilter;
 @ConditionalOnExpression(CommonConstants.$SERVER_SSL_ENABLED_WD + " and !" + ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 public class SubscriberAccessControlFilter extends AccessControlFilter {
 	
-	@Override
-	protected void checkClientAuthorized(final String clientCN, final String method, final String requestTarget, final String requestJSON, final Map<String,String[]> queryParams) {
-		super.checkClientAuthorized(clientCN, method, requestTarget, requestJSON, queryParams);
-		
-		//TODO: implement here your custom access filter if any further
-	}
+@Override
+protected void checkClientAuthorized(final String clientCN, final String method, final String requestTarget, final String requestJSON, final Map<String,String[]> queryParams) {
+	super.checkClientAuthorized(clientCN, method, requestTarget, requestJSON, queryParams);
+	
+	//TODO: implement here your custom access filter if any further
+}
 }

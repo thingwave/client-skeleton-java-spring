@@ -8,7 +8,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
 import java.util.Base64;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,9 +43,8 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
 	
-	@Value("#{'${preset_events}'.split(',')}")
-	//@Value("${default_events:#{null}}")
-	private List<String> defaultEvents;
+	@Value( SubscriberConstants.$PRESET_EVENT_TYPES_WD )
+	private String presetEvents;
 	
 	@Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
 	private String clientSystemName;
@@ -77,8 +75,13 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 		
 		setTokenSecurityFilter();
 		
-		arrowheadService.updateCoreServiceURIs(CoreSystem.EVENT_HANDLER);	
-		subscribeToDefaultEvents();
+		if ( arrowheadService.echoCoreSystem( CoreSystem.EVENT_HANDLER ) ) {
+			
+			arrowheadService.updateCoreServiceURIs( CoreSystem.EVENT_HANDLER );	
+			subscribeToPresetEvents();
+			
+		}
+		
 		//TODO: implement here any custom behavior on application start up
 	}
 	
@@ -116,11 +119,13 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 	}
 
 	//-------------------------------------------------------------------------------------------------
-	private void subscribeToDefaultEvents() {
-		if( defaultEvents == null) {
+	private void subscribeToPresetEvents() {
+		if( presetEvents == null) {
 			
-			logger.info("No default events to subscribe.");
+			logger.info("No preset events to subscribe.");
 		} else {
+			
+			final String[] eventTypes = presetEvents.split(",");
 			
 			final SystemRequestDTO subscriber = new SystemRequestDTO();
 			subscriber.setSystemName( clientSystemName );
@@ -128,13 +133,14 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 			subscriber.setPort( clientSystemPort );
 			subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );
 			
-			for (final String eventType : defaultEvents) {
+			
+			for ( final String eventType : eventTypes ) {
 				
 				arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
 				
 			}
 			
-			for (final String eventType : defaultEvents) {
+			for ( final String eventType : eventTypes ) {
 				
 				final SubscriptionRequestDTO subscription = new SubscriptionRequestDTO(
 						eventType.toUpperCase(), 
@@ -155,7 +161,7 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 						
 						logger.debug("Subscription is allready in DB");
 					}
-				}  catch ( Exception ex) {
+				} catch ( Exception ex) {
 					
 					logger.debug("Could not subscribe to EventType: " + subscription.getEventType());
 				} 

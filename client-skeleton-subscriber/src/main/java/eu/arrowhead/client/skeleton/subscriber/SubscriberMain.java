@@ -1,8 +1,6 @@
 package eu.arrowhead.client.skeleton.subscriber;
 
-import java.time.ZonedDateTime;
 import java.util.Base64;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +16,6 @@ import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
 import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
 import eu.arrowhead.common.CommonConstants;
-import eu.arrowhead.common.core.CoreSystem;
 import eu.arrowhead.common.dto.shared.SubscriptionRequestDTO;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.InvalidParameterException;
@@ -30,9 +27,8 @@ public class SubscriberMain implements ApplicationRunner {
     //=================================================================================================
 	// members
 	
-	@Value("#{'${preset_events}'.split(',')}")
-	//@Value("${default_events:#{null}}")
-	private List<String> defaultEvents;
+	@Value( SubscriberConstants.$PRESET_EVENT_TYPES_WD )
+	private String presetEvents;
 	
 	@Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
 	private String clientSystemName;
@@ -59,8 +55,7 @@ public class SubscriberMain implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
-		arrowheadService.updateCoreServiceURIs(CoreSystem.EVENT_HANDLER);	
-		subscribeToDefaultEvents();
+		subscribeToPresetEvents();
 		
 	}
 	
@@ -68,11 +63,13 @@ public class SubscriberMain implements ApplicationRunner {
 	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
-	private void subscribeToDefaultEvents() {
-		if( defaultEvents == null) {
+	private void subscribeToPresetEvents() {
+		if( presetEvents == null) {
 			
-			logger.info("No default events to subscribe.");
+			logger.info("No preset events to subscribe.");
 		} else {
+			
+			final String[] eventTypes = presetEvents.split(",");
 			
 			final SystemRequestDTO subscriber = new SystemRequestDTO();
 			subscriber.setSystemName( clientSystemName );
@@ -80,13 +77,14 @@ public class SubscriberMain implements ApplicationRunner {
 			subscriber.setPort( clientSystemPort );
 			subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );
 			
-			for (final String eventType : defaultEvents) {
+			
+			for ( final String eventType : eventTypes ) {
 				
 				arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
 				
 			}
 			
-			for (final String eventType : defaultEvents) {
+			for ( final String eventType : eventTypes ) {
 				
 				final SubscriptionRequestDTO subscription = new SubscriptionRequestDTO(
 						eventType.toUpperCase(), 
