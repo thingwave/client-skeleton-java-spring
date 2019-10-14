@@ -88,7 +88,27 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void customDestroy() {
-		//TODO: implement here any custom behavior on application shout down
+		 
+		if( presetEvents == null) {
+			
+			logger.info("No preset events to unsubscribe.");
+		} else {
+			
+			final String[] eventTypes = presetEvents.split(",");
+			
+			final SystemRequestDTO subscriber = new SystemRequestDTO();
+			subscriber.setSystemName( clientSystemName );
+			subscriber.setAddress( clientSystemAddress );
+			subscriber.setPort( clientSystemPort );
+			subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );
+			
+			
+			for ( final String eventType : eventTypes ) {
+				
+				arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
+				
+			}
+		}
 	}
 	
 	//=================================================================================================
