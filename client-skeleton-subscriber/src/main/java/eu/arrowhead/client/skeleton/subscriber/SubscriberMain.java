@@ -15,6 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
 import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
+import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberDefaults;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.dto.shared.SubscriptionRequestDTO;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
@@ -90,7 +91,7 @@ public class SubscriberMain implements ApplicationRunner {
 						eventType.toUpperCase(), 
 						subscriber, 
 						null, 
-						SubscriberConstants.EVENT_NOTIFICATION_URI, 
+						SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI, 
 						false, 
 						null, 
 						null, 

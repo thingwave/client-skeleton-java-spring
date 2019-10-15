@@ -20,6 +20,7 @@ import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.config.ApplicationInitListener;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
 import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
+import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberDefaults;
 import eu.arrowhead.client.skeleton.subscriber.security.SubscriberSecurityConfig;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
@@ -42,6 +43,9 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 	
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
+	
+	@Value( SubscriberConstants.$PRESET_NOTIFICATION_URI_WD )
+	private String presetNotificationUris;
 	
 	@Value( SubscriberConstants.$PRESET_EVENT_TYPES_WD )
 	private String presetEvents;
@@ -75,6 +79,9 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 		
 		setTokenSecurityFilter();
 		
+		setNotificationFilter();			
+
+		
 		if ( arrowheadService.echoCoreSystem( CoreSystem.EVENT_HANDLER ) ) {
 			
 			arrowheadService.updateCoreServiceURIs( CoreSystem.EVENT_HANDLER );	
@@ -84,7 +91,8 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 		
 		//TODO: implement here any custom behavior on application start up
 	}
-	
+
+
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void customDestroy() {
@@ -166,7 +174,7 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 						eventType.toUpperCase(), 
 						subscriber, 
 						null, 
-						SubscriberConstants.EVENT_NOTIFICATION_URI, 
+						SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI, 
 						false, 
 						null, 
 						null, 
@@ -187,6 +195,24 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 				} 
 				
 			}
+		}
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	private void setNotificationFilter() {
+		logger.debug( "setNotificationFilter started..." );
+		
+		if( presetNotificationUris.isEmpty() ) {
+			
+			logger.info("TokenSecurityFilter in not active");
+		
+		} else {
+			
+			final String[] notificationUris = presetNotificationUris.split( "," );
+
+			subscriberSecurityConfig.getNotificationFilter().setNotificationUris( notificationUris );
+			subscriberSecurityConfig.getNotificationFilter().setServerCN( arrowheadService.getServerCN() );
+
 		}
 	}
 }
