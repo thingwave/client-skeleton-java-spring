@@ -2,6 +2,7 @@ package eu.arrowhead.client.skeleton.subscriber.security;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,14 +28,15 @@ public class SubscriberNotificationAccessControlFilter extends ArrowheadFilter {
 	
 	private static final CoreSystem[] allowedCoreSystemsForSendingNotification = { CoreSystem.EVENT_HANDLER };
 	
-	private String[] notificationUris;
+	private Map<String, String> eventTypeMap;
 	private String serverCN;
+
 
 	//=================================================================================================
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public void setNotificationUris( final String[] notificationUris) { this.notificationUris = notificationUris;}
+	public void setEventTypeMap( final Map<String, String> eventTypeMap) { this.eventTypeMap = eventTypeMap;}
 	public void setServerCN( final String serverCN) { this.serverCN = serverCN; }
 
 	//=================================================================================================
@@ -48,11 +50,17 @@ public class SubscriberNotificationAccessControlFilter extends ArrowheadFilter {
 			try {
 				final HttpServletRequest httpRequest = (HttpServletRequest) request;
 				final String requestTarget = Utilities.stripEndSlash(httpRequest.getRequestURL().toString());
-				
-				if ( requestTarget.contains( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI )) {
+					
+				if ( eventTypeMap != null) {
+					
+					for (final String notifacationUri  : eventTypeMap.values()) {
 						
-						checkIfClientIsAnAllowedCoreSystem( getCertificateCNFromRequest( httpRequest ), getServerCloudCN( serverCN ), allowedCoreSystemsForSendingNotification, requestTarget);
+						if ( requestTarget.endsWith( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI + "/" + notifacationUri )) {
+							
+							checkIfClientIsAnAllowedCoreSystem( getCertificateCNFromRequest( httpRequest ), getServerCloudCN( serverCN ), allowedCoreSystemsForSendingNotification, requestTarget);
 
+						}
+					}
 				}
 	
 

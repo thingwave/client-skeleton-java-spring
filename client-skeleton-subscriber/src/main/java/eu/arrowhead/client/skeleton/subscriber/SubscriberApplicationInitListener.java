@@ -8,6 +8,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
 import java.util.Base64;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,12 +20,9 @@ import org.springframework.stereotype.Component;
 import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.config.ApplicationInitListener;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
-import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
-import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberDefaults;
 import eu.arrowhead.client.skeleton.subscriber.security.SubscriberSecurityConfig;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
-import eu.arrowhead.common.dto.shared.SubscriptionRequestDTO;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 import eu.arrowhead.common.exception.InvalidParameterException;
@@ -44,12 +42,6 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
 	
-	@Value( SubscriberConstants.$PRESET_NOTIFICATION_URI_WD )
-	private String presetNotificationUris;
-	
-	@Value( SubscriberConstants.$PRESET_EVENT_TYPES_WD )
-	private String presetEvents;
-	
 	@Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
 	private String clientSystemName;
 	
@@ -60,6 +52,9 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 	private int clientSystemPort;
 	
 	private final Logger logger = LogManager.getLogger(SubscriberApplicationInitListener.class);
+	
+	@Autowired
+	private ConfigEventProperites configEventProperites;
 	
 	//=================================================================================================
 	// methods
@@ -97,21 +92,14 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 	@Override
 	public void customDestroy() {
 		 
-		if( presetEvents == null) {
+		final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
+		if( eventTypeMap == null) {
 			
 			logger.info("No preset events to unsubscribe.");
+		
 		} else {
 			
-			final String[] eventTypes = presetEvents.split(",");
-			
-			final SystemRequestDTO subscriber = new SystemRequestDTO();
-			subscriber.setSystemName( clientSystemName );
-			subscriber.setAddress( clientSystemAddress );
-			subscriber.setPort( clientSystemPort );
-			subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );
-			
-			
-			for ( final String eventType : eventTypes ) {
+			for ( final String eventType : eventTypeMap.keySet() ) {
 				
 				arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
 				
@@ -141,6 +129,9 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 			}			
 			final PrivateKey subscriberPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
 
+			final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
+
+			subscriberSecurityConfig.getTokenSecurityFilter().setEventTypeMap( eventTypeMap );
 			subscriberSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
 			subscriberSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(subscriberPrivateKey);
 		}
@@ -148,40 +139,35 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 
 	//-------------------------------------------------------------------------------------------------
 	private void subscribeToPresetEvents() {
-		if( presetEvents == null) {
+		
+		final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
+		
+		if( eventTypeMap == null) {
 			
 			logger.info("No preset events to subscribe.");
+		
 		} else {
-			
-			final String[] eventTypes = presetEvents.split(",");
 			
 			final SystemRequestDTO subscriber = new SystemRequestDTO();
 			subscriber.setSystemName( clientSystemName );
 			subscriber.setAddress( clientSystemAddress );
 			subscriber.setPort( clientSystemPort );
-			subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );
+			subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );		
 			
-			
-			for ( final String eventType : eventTypes ) {
+			for (final String eventType  : eventTypeMap.keySet()) {
+					
+				try {
+					
+					arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
 				
-				arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
-				
-			}
-			
-			for ( final String eventType : eventTypes ) {
-				
-				final SubscriptionRequestDTO subscription = new SubscriptionRequestDTO(
-						eventType.toUpperCase(), 
-						subscriber, 
-						null, 
-						SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI, 
-						false, 
-						null, 
-						null, 
-						null);
+				} catch (Exception ex) {
+					
+					logger.debug("Could not unsubscribe from EventType: " + eventType );
+				}
 				
 				try {
-					arrowheadService.subscribeToEventHandler( subscription );
+					
+					arrowheadService.subscribeToEventHandler( SubscriberUtilities.createSubscriptionRequestDTO( eventType, subscriber, eventTypeMap.get( eventType ) ) );
 				
 				} catch ( InvalidParameterException ex) {
 					
@@ -189,12 +175,13 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 						
 						logger.debug("Subscription is allready in DB");
 					}
+					
 				} catch ( Exception ex) {
 					
-					logger.debug("Could not subscribe to EventType: " + subscription.getEventType());
+					logger.debug("Could not subscribe to EventType: " + eventType );
 				} 
-				
 			}
+
 		}
 	}
 	
@@ -202,17 +189,10 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 	private void setNotificationFilter() {
 		logger.debug( "setNotificationFilter started..." );
 		
-		if( presetNotificationUris.isEmpty() ) {
-			
-			logger.info("TokenSecurityFilter in not active");
+		final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
+
+		subscriberSecurityConfig.getNotificationFilter().setEventTypeMap( eventTypeMap );
+		subscriberSecurityConfig.getNotificationFilter().setServerCN( arrowheadService.getServerCN() );
 		
-		} else {
-			
-			final String[] notificationUris = presetNotificationUris.split( "," );
-
-			subscriberSecurityConfig.getNotificationFilter().setNotificationUris( notificationUris );
-			subscriberSecurityConfig.getNotificationFilter().setServerCN( arrowheadService.getServerCN() );
-
-		}
 	}
 }

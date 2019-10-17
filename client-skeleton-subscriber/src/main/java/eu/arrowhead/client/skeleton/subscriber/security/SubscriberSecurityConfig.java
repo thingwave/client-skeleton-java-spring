@@ -8,7 +8,6 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 
 import eu.arrowhead.client.library.config.DefaultSecurityConfig;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
-import eu.arrowhead.client.skeleton.subscriber.constants.SubscriberConstants;
 
 @Configuration
 @EnableWebSecurity
@@ -20,9 +19,6 @@ public class SubscriberSecurityConfig extends DefaultSecurityConfig {
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
 	
-	@Value( SubscriberConstants.$PRESET_NOTIFICATION_URI_WD )
-	private String presetNotificationUris;
-	
 	private SubscriberTokenSecurityFilter tokenSecurityFilter;
 	private SubscriberNotificationAccessControlFilter notificationFilter;
 
@@ -33,12 +29,9 @@ public class SubscriberSecurityConfig extends DefaultSecurityConfig {
 	@Override
 	protected void configure( final HttpSecurity http) throws Exception {
 		super.configure(http);
-
-		if ( presetNotificationUris != null) {
 			
-			notificationFilter = new SubscriberNotificationAccessControlFilter();
-			http.addFilterBefore( notificationFilter , SecurityContextHolderAwareRequestFilter.class );
-		}
+		notificationFilter = new SubscriberNotificationAccessControlFilter();
+		http.addFilterBefore( notificationFilter , SecurityContextHolderAwareRequestFilter.class );
 		
 		if (tokenSecurityFilterEnabled) {
 			tokenSecurityFilter = new SubscriberTokenSecurityFilter();

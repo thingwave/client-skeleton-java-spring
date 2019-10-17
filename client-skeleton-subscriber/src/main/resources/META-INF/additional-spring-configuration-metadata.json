@@ -20,13 +20,18 @@
     "description": "A description for 'token.security.filter.enabled'"
   },
   {
-    "name": "preset_events",
+    "name": "event.eventTypeURIMap.START_INIT",
     "type": "java.lang.String",
-    "description": "A description for 'default_events'"
+    "description": "A description for 'event.eventTypeURIMap.START_INIT'"
   },
   {
-    "name": "preset_notification_uris",
+    "name": "event.eventTypeURIMap.START_RUN",
     "type": "java.lang.String",
-    "description": "A description for 'preset_notification_uris'"
+    "description": "A description for 'event.eventTypeURIMap.START_RUN'"
+  },
+  {
+    "name": "event.eventTypeURIMap.REQUEST_RECEIVED",
+    "type": "java.lang.String",
+    "description": "A description for 'event.eventTypeURIMap.REQUEST_RECEIVED'"
   }
 ]}

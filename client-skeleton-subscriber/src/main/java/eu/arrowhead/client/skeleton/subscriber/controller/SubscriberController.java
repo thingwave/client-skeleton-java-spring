@@ -2,7 +2,6 @@ package eu.arrowhead.client.skeleton.subscriber.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,9 +22,6 @@ public class SubscriberController {
 
 	private final Logger logger = LogManager.getLogger(SubscriberController.class);
 	
-	@Value( SubscriberConstants.$PRESET_NOTIFICATION_URI_WD )
-	private String presetNotificationUris;
-	
 	//=================================================================================================
 	// methods
 
@@ -36,10 +32,32 @@ public class SubscriberController {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	@PostMapping() 
-	public void receiveEvent(@RequestBody final EventDTO event ) {
+	@PostMapping(path = SubscriberConstants.REQUEST_RECEIVED_NOTIFICATION_URI) 
+	public void receivePublisherReceivedRequestEvent(@RequestBody final EventDTO event ) {	
+		logger.debug("receivePublisherReceivedRequestEvent started...");
 		
-		logger.debug("Received event");
+		if( event.getEventType() == null) {
+			
+			logger.debug( "EventType is null." );
+		}
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	@PostMapping(path = SubscriberConstants.START_INIT_NOTIFICATION_URI) 
+	public void receivePublsisherStartedInitEvent(@RequestBody final EventDTO event ) {
+		logger.debug("receivePublsisherStartedInitEvent started... ");
+		
+		if( event.getEventType() == null) {
+			
+			logger.debug( "EventType is null." );
+		}
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	@PostMapping(path = SubscriberConstants.START_RUN_NOTIFICATION_URI) 
+	public void receivePublsisherStartedRunEvent(@RequestBody final EventDTO event ) {
+		logger.debug("receivePublsisherStartedRunEvent started... ");
+		
 		if( event.getEventType() == null) {
 			
 			logger.debug( "EventType is null." );

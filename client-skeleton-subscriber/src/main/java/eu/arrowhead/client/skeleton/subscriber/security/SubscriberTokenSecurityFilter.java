@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,7 +28,8 @@ public class SubscriberTokenSecurityFilter extends TokenSecurityFilter {
 	
 	private PrivateKey myPrivateKey;
 	private PublicKey authorizationPublicKey;
-	private boolean enableNotifications;
+	
+	private Map<String, String> eventTypeMap;
 	
 	//=================================================================================================
 	// methods
@@ -54,11 +56,11 @@ public class SubscriberTokenSecurityFilter extends TokenSecurityFilter {
 		this.authorizationPublicKey = authorizationPublicKey;
 	}
 	
-	//-------------------------------------------------------------------------------------------------
-	public void setEnableNotification( final boolean enableNotification ) {
-		this.enableNotifications = enableNotification;
+	//-------------------------------------------------------------------------------------------------	
+	public void setEventTypeMap(final Map<String, String> eventTypeMap) {
+		this.eventTypeMap = eventTypeMap;
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
@@ -68,26 +70,33 @@ public class SubscriberTokenSecurityFilter extends TokenSecurityFilter {
 				final HttpServletRequest httpRequest = (HttpServletRequest) request;
 				final String requestTarget = Utilities.stripEndSlash(httpRequest.getRequestURL().toString());
 				
-				if ( requestTarget.contains( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI ) ) {
+				if ( eventTypeMap != null) {
 					
-					chain.doFilter(request, response);
-					return;
-				} else {
-					
-					final String clientCN = getCertificateCNFromRequest(httpRequest);
-					if (clientCN == null) {
-						log.error("Unauthorized access: {}", requestTarget);
-						throw new AuthException("Unauthorized access: " + requestTarget);
+					for (final String notifacationUri  : eventTypeMap.values()) {
+						
+						if ( requestTarget.endsWith( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI + "/" + notifacationUri )) {
+							
+							chain.doFilter(request, response);
+							return;
+						}
 					}
-					
-					final String token = httpRequest.getParameter(CommonConstants.REQUEST_PARAM_TOKEN);
-					if (Utilities.isEmpty(token)) {
-						log.error("Unauthorized access: {}, no token is specified", requestTarget);
-						throw new AuthException("Unauthorized access: " + requestTarget + ", no token is specified");
-					}
-					
-					checkToken(clientCN, token, requestTarget);
 				}
+	
+					
+				final String clientCN = getCertificateCNFromRequest(httpRequest);
+				if (clientCN == null) {
+					log.error("Unauthorized access: {}", requestTarget);
+					throw new AuthException("Unauthorized access: " + requestTarget);
+				}
+				
+				final String token = httpRequest.getParameter(CommonConstants.REQUEST_PARAM_TOKEN);
+				if (Utilities.isEmpty(token)) {
+					log.error("Unauthorized access: {}, no token is specified", requestTarget);
+					throw new AuthException("Unauthorized access: " + requestTarget + ", no token is specified");
+				}
+				
+				checkToken(clientCN, token, requestTarget);
+				
 
 			} catch (final ArrowheadException ex) {
 				handleException(ex, response);
