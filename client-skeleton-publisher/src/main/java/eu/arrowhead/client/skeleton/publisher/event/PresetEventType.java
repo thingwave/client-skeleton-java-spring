@@ -9,10 +9,13 @@ import eu.arrowhead.common.Utilities;
 
 public enum PresetEventType {
 
+	//=================================================================================================
+	// elements
+	
 	START_INIT( EventTypeConstants.EVENT_TYPE_START_INIT, List.of()),
 	START_RUN( EventTypeConstants.EVENT_TYPE_START_RUN, List.of() ),
 	REQUEST_RECEIVED( EventTypeConstants.EVENT_TYPE_REQUEST_RECEIVED, List.of() );
-	
+
 	//=================================================================================================
 	// members
 	
@@ -31,7 +34,6 @@ public enum PresetEventType {
 
 	//-------------------------------------------------------------------------------------------------
 	private PresetEventType( final String eventTypeName, final List<String> metadataKeys ) {
-		
 		Assert.isTrue( !Utilities.isEmpty( eventTypeName ), "EventType name is invalid." );
 		
 		this.metadataKeys = metadataKeys != null ? Collections.unmodifiableList( metadataKeys ) : List.of();
