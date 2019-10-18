@@ -40,7 +40,7 @@ Location: `src/main/resources`
 * In case of a provider you have to set its web-server parameters by the `server.address` and `server.port` properties.
 * In case of a consumer decide whether it should act as a web-server or not. If yes, then set the `spring.main.web-application-type` to 'servlet' and set further server parameters like in the provider case. If not, just leave these properties unchanged.
 * In case of a subscriber you have to set its web-server parameters by the `server.address` and `server.port` properties.
-* In case of a subscriber you should set event type - notification Uri pair properties as `event.eventTypeURIMap.{YOUR_EVENT_TYPE}={notificationuri for YOUR_EVENT_TYPE}`.
+* In case of a subscriber you should set event type - notification URI pair properties as `event.eventTypeURIMap.{YOUR_EVENT_TYPE}={notificationuri for YOUR_EVENT_TYPE}`.
 * In case of a publisher you have to set its web-server parameters by the `server.address` and `server.port` properties.
 * In case of a publisher decide whether it should act as a web-server or not. If not, then set the `spring.main.web-application-type` to 'none'. 
 
@@ -57,8 +57,8 @@ The skeletons provide a built-in arrowhed framework compatible security configur
   -  `ProviderAccessControlFilter.class` is doing the same as described in the consumer case, but is effective only when `server.ssl.enabled` property is set to true and `token.security.filter.enabled` property is set to false. When `token.security.filter.enabled` property is set to true, then `ProviderTokenSecurityFilter.class` is effective which is validating whether a token is received within the HTTPS request and whether it is a valid one ore not. *(**Note** that the token is created by the Authorization Core System during the orchestration process and the consumer have to put it into its HTTPS request as a query parameter.)*
   -  `PublisherAccessControlFilter.class` is doing the same as described in the provider case, but when `token.security.filter.enabled` property is set to true, then `PublisherTokenSecurityFilter.class` is effective and is doing the same as described in the provider case.
   -  `SubscriberAccessControlFilter.class` is doing the same as described in the provider case, but when `token.security.filter.enabled` property is set to true, then `SubscriberTokenSecurityFilter.class` is effective.
-* The `SubscriberTokenSecurityFilter.class` checking the requested target Uri and if it is not registered in the applicaction.properties as notification Uri then validating whether a token is received within the HTTPS request and whether it is a valid one ore not.
-* The `SubscriberNotificationAccessControlFilter.class` checking the requested target Uri and if it is not registered in the applicaction.properties as notification Uri then validating whether the requester is and allowed Core System or not. If the requester is not allowed, throws an AuthExeption with `" is unauthorized to access "` text in the message body. *(**Note:** By default only the `EVENT HANDLER CORE SYSTEM` is allowed.)* 
+* The `SubscriberTokenSecurityFilter.class` is only checking the token if the requested target URI is NOT a notification URI. Notfication URIs are specified in the application.properties file.
+* The `SubscriberNotificationAccessControlFilter.class` is checking the requested target URI and if it is registered in the application.properties as notification URI then validating whether the requester is an allowed Core System. If the requester is not allowed, it throws an AuthExeption with `" is unauthorized to access "` text in the message body. *(**Note:** By default only the `EVENT HANDLER CORE SYSTEM` is allowed.)* 
 
 ##### (4th) start-up & shutdown configuration
 The skeletons provide a built-in application start-up and shutdown configuration located in `eu.arrowhead.client.skeleton.consumer|provider` package.
