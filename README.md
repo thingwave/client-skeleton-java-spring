@@ -3,7 +3,7 @@
 
 ### How to use client skeletons?
 
-Fork this repo and extend the skeletons with your own application code. ([check the best practice recommendations](https://github.com/arrowhead-f/client-skeleton-java-spring/blob/development/README.md#best-practices-to-start-with-the-skeletons))
+Fork this repo and extend the skeletons with your own application code. ([check the best practice recommendations](https://github.com/arrowhead-f/client-skeleton-java-spring/blob/master/README.md#best-practices-to-start-with-the-skeletons))
 
 ### Requirements
 
@@ -64,12 +64,12 @@ The skeletons provide a built-in arrowhed framework compatible security configur
 The skeletons provide a built-in application start-up and shutdown configuration located in `eu.arrowhead.client.skeleton.consumer|provider` package.
 The `ConsumerApplicationInitListener.class`, the `ProviderApplicationInitListener.class`, `PublisherApplicationInitListener.class` and the `SubscriberApplicationInitListener.class` contains the `customInit()` method which is executed automatically right after the application start-up and also the `customDestroy()` method which is executed automatically right after triggering the application shutdown, but still before the final stop. *(**Look for the 'TODO' marks** within these classes if you want to implement additional logic.)*
 
-Already implemented Consumer start-up logics:
+Already implemented Consumer start-up logic:
 * Checking the Service Registry Core System reachability. *(Sends an 'echo' request to the server.)*
 * Checking the Orchestrator Core System reachability. *(Sends an 'echo' request to the server.)*
 * Querying and storing the public service URIs of Orchestrator Core System. *(Sends 'query' requests to the Service Registry.)*
 
-Already implemented Provider start-up logics:
+Already implemented Provider start-up logic:
 * Checking the Service Registry Core System reachability. *(Sends an 'echo' request to the server.)*
 * Checking the Authorization Core System reachability if 'TokenSecurityFilter' enabled. *(Sends an 'echo' request to the server.)*
 * Querying and storing the 'public-key' service URI of Authorization Core System if token security filter is enabled. *(Sends a 'query' request to the Service Registry.)*
@@ -78,7 +78,7 @@ Already implemented Provider start-up logics:
 Recommended Provider start-up logics:
 * Registering the provided service into the Service Registry Core System. *(**Hint:** Use the `forceRegisterServiceToServiceRegistry()` method from `ArrowheadService.class`. It removes your current service registry entry from the database and registers again, so it ensures that if your service interfaces or the metadata have been changed, then the freshest condition will be published.)*
 
-Recommended Provider shutdown logics:
+Recommended Provider shutdown logic:
 * Unregistering the service from Service Registry Core System. *(**Hint:** Use the `unregisterServiceFromServiceRegistry()` method from `ArrowheadService.class`.)*
 
 Already implemented Publisher start-up logics:
