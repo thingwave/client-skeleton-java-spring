@@ -68,7 +68,7 @@ public class ConsumerMain implements ApplicationRunner {
     	
     	if (response == null || response.getResponse().isEmpty()) {
     		//If no proper providers found during the orchestration process, then the response list will be empty. Handle the case as you wish!
-    		logger.debug( "Orchestration response is empty");
+    		logger.debug("Orchestration response is empty");
     		return;
     	}
     	
