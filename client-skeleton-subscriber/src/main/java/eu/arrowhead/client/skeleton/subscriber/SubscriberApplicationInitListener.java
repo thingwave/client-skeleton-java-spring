@@ -167,23 +167,23 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 					
 					arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
 				
-				} catch (Exception ex) {
+				} catch (final Exception ex) {
 					
-					logger.debug("Exception happend in subscription initalization" + ex);
+					logger.debug("Exception happend in subscription initalization " + ex);
 				}
 				
 				try {
 					
 					arrowheadService.subscribeToEventHandler( SubscriberUtilities.createSubscriptionRequestDTO( eventType, subscriber, eventTypeMap.get( eventType ) ) );
 				
-				} catch ( InvalidParameterException ex) {
+				} catch ( final InvalidParameterException ex) {
 					
 					if( ex.getMessage().contains( "Subscription violates uniqueConstraint rules" )) {
 						
 						logger.debug("Subscription is allready in DB");
 					}
 					
-				} catch ( Exception ex) {
+				} catch ( final Exception ex) {
 					
 					logger.debug("Could not subscribe to EventType: " + eventType );
 				} 
