@@ -16,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
+import eu.arrowhead.client.skeleton.publisher.constants.PublisherConstants;
 import eu.arrowhead.client.skeleton.publisher.event.PresetEventType;
 import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
@@ -42,7 +43,7 @@ public class PublisherMain implements ApplicationRunner {
 	private boolean sslEnabled;
 	
 	@Autowired
-	ArrowheadService arrowheadService;
+	private ArrowheadService arrowheadService;
 	
 	private final Logger logger = LogManager.getLogger(PublisherApplicationInitListener.class);
 	
@@ -82,7 +83,7 @@ public class PublisherMain implements ApplicationRunner {
 
 		final Map<String,String> metadata = null;
 		
-		final String payload = "RunStarted";
+		final String payload = PublisherConstants.START_RUN_EVENT_PAYLOAD;
 		
 		final String timeStamp = Utilities.convertZonedDateTimeToUTCString( ZonedDateTime.now() );
 		

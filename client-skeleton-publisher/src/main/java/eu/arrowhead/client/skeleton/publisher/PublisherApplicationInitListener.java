@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.config.ApplicationInitListener;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
+import eu.arrowhead.client.skeleton.publisher.constants.PublisherConstants;
 import eu.arrowhead.client.skeleton.publisher.event.PresetEventType;
 import eu.arrowhead.client.skeleton.publisher.security.PublisherSecurityConfig;
 import eu.arrowhead.common.CommonConstants;
@@ -140,7 +141,7 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 
 		final Map<String,String> metadata = null;
 		
-		final String payload = "InitStarted";
+		final String payload = PublisherConstants.START_INIT_EVENT_PAYLOAD;
 		
 		final String timeStamp = Utilities.convertZonedDateTimeToUTCString( ZonedDateTime.now() );
 		

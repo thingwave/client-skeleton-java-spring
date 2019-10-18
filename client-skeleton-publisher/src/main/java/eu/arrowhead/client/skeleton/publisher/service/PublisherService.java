@@ -42,7 +42,7 @@ public class PublisherService {
 	private boolean sslEnabled;
 	
 	@Autowired
-	ArrowheadService arrowheadService;
+	private ArrowheadService arrowheadService;
 	
 	private final Logger logger = LogManager.getLogger(PublisherApplicationInitListener.class);
 	
