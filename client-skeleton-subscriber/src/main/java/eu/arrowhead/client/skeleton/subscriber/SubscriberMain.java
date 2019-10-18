@@ -45,10 +45,10 @@ public class SubscriberMain implements ApplicationRunner {
 	private boolean sslEnabled;
 	
 	@Autowired
-	ArrowheadService arrowheadService;
+	private ArrowheadService arrowheadService;
 	
 	@Autowired
-	ConfigEventProperites configEventProperites;
+	private ConfigEventProperites configEventProperites;
 	
 	private final Logger logger = LogManager.getLogger(SubscriberApplicationInitListener.class);
 	
@@ -62,7 +62,7 @@ public class SubscriberMain implements ApplicationRunner {
 	}
 
 	@Override
-	public void run(ApplicationArguments args) throws Exception {
+	public void run(final ApplicationArguments args) throws Exception {
 
 		subscribeToPresetEvents();
 		
@@ -72,6 +72,7 @@ public class SubscriberMain implements ApplicationRunner {
 	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
+	//Sample implementation of subscription when application run started
 	private void subscribeToPresetEvents() {
 		
 		final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
@@ -99,7 +100,7 @@ public class SubscriberMain implements ApplicationRunner {
 					
 					arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
 				
-				} catch (Exception ex) {
+				} catch (final Exception ex) {
 					
 					logger.debug("Could not unsubscribe from EventType: " + eventType );
 				}
@@ -108,14 +109,14 @@ public class SubscriberMain implements ApplicationRunner {
 					
 					arrowheadService.subscribeToEventHandler( SubscriberUtilities.createSubscriptionRequestDTO( eventType, subscriber, eventTypeMap.get( eventType ) ) );
 				
-				} catch ( InvalidParameterException ex) {
+				} catch ( final InvalidParameterException ex) {
 					
 					if( ex.getMessage().contains( "Subscription violates uniqueConstraint rules" )) {
 						
-						logger.debug("Subscription is allready in DB");
+						logger.debug("Subscription is already in DB");
 					}
 					
-				} catch ( Exception ex) {
+				} catch ( final Exception ex) {
 					
 					logger.debug("Could not subscribe to EventType: " + eventType );
 				} 

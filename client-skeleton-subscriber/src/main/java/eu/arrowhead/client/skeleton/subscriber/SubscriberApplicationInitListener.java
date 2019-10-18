@@ -180,7 +180,7 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 					
 					if( ex.getMessage().contains( "Subscription violates uniqueConstraint rules" )) {
 						
-						logger.debug("Subscription is allready in DB");
+						logger.debug("Subscription is already in DB");
 					}
 					
 				} catch ( final Exception ex) {
