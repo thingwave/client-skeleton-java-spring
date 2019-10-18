@@ -41,6 +41,9 @@ public class SubscriberMain implements ApplicationRunner {
 	@Value(ClientCommonConstants.$CLIENT_SERVER_PORT_WD)
 	private int clientSystemPort;
 	
+	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
+	private boolean sslEnabled;
+	
 	@Autowired
 	ArrowheadService arrowheadService;
 	
@@ -83,8 +86,12 @@ public class SubscriberMain implements ApplicationRunner {
 			subscriber.setSystemName( clientSystemName );
 			subscriber.setAddress( clientSystemAddress );
 			subscriber.setPort( clientSystemPort );
-			subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );
 			
+			if (sslEnabled) {
+				
+				subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );
+				
+			}
 			
 			for (final String eventType  : eventTypeMap.keySet()) {
 					
