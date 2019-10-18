@@ -8,6 +8,7 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 
 import eu.arrowhead.client.library.config.DefaultSecurityConfig;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
+import eu.arrowhead.common.CommonConstants;
 
 @Configuration
 @EnableWebSecurity
@@ -18,6 +19,9 @@ public class SubscriberSecurityConfig extends DefaultSecurityConfig {
 	
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
+	
+	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
+	private boolean sslEnabled;
 	
 	private SubscriberTokenSecurityFilter tokenSecurityFilter;
 	private SubscriberNotificationAccessControlFilter notificationFilter;
@@ -33,7 +37,7 @@ public class SubscriberSecurityConfig extends DefaultSecurityConfig {
 		notificationFilter = new SubscriberNotificationAccessControlFilter();
 		http.addFilterBefore( notificationFilter , SecurityContextHolderAwareRequestFilter.class );
 		
-		if (tokenSecurityFilterEnabled) {
+		if (sslEnabled && tokenSecurityFilterEnabled) {
 			tokenSecurityFilter = new SubscriberTokenSecurityFilter();
 			http.addFilterAfter(tokenSecurityFilter, SecurityContextHolderAwareRequestFilter.class);			
 		}
