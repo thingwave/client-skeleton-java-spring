@@ -19,6 +19,7 @@ import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.config.ApplicationInitListener;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
 import eu.arrowhead.client.skeleton.provider.security.ProviderSecurityConfig;
+import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
 import eu.arrowhead.common.exception.ArrowheadException;
@@ -38,6 +39,9 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
 	
+	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
+	private boolean sslEnabled;
+	
 	private final Logger logger = LogManager.getLogger(ProviderApplicationInitListener.class);
 	
 	//=================================================================================================
@@ -49,7 +53,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
-		if (tokenSecurityFilterEnabled) {
+		if (sslEnabled && tokenSecurityFilterEnabled) {
 			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
 
 			//Initialize Arrowhead Context
@@ -72,7 +76,7 @@ public class ProviderApplicationInitListener extends ApplicationInitListener {
 
 	//-------------------------------------------------------------------------------------------------
 	private void setTokenSecurityFilter() {
-		if(!tokenSecurityFilterEnabled) {
+		if(!tokenSecurityFilterEnabled || !sslEnabled) {
 			logger.info("TokenSecurityFilter in not active");
 		} else {
 			final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
