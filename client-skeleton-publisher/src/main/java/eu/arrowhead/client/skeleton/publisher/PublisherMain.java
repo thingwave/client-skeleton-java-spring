@@ -21,11 +21,6 @@ import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.dto.shared.EventPublishRequestDTO;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
-import eu.arrowhead.common.exception.ArrowheadException;
-import eu.arrowhead.common.exception.AuthException;
-import eu.arrowhead.common.exception.BadPayloadException;
-import eu.arrowhead.common.exception.InvalidParameterException;
-import eu.arrowhead.common.exception.UnavailableServerException;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE}) //TODO: add custom packages if any

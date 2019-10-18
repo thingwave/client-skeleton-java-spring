@@ -28,10 +28,6 @@ import eu.arrowhead.common.core.CoreSystem;
 import eu.arrowhead.common.dto.shared.EventPublishRequestDTO;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
-import eu.arrowhead.common.exception.AuthException;
-import eu.arrowhead.common.exception.BadPayloadException;
-import eu.arrowhead.common.exception.InvalidParameterException;
-import eu.arrowhead.common.exception.UnavailableServerException;
 
 @Component
 public class PublisherApplicationInitListener extends ApplicationInitListener {
