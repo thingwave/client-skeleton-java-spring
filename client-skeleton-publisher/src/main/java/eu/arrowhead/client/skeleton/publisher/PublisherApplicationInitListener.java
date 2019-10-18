@@ -122,15 +122,6 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 
 	//-------------------------------------------------------------------------------------------------	
 	//Sample implementation of event publishing at application init time
-	/**
-	 * Sends a http(s) 'publish' request to Event Handler Core System.
-	 * 
-	 * @throws AuthException when you are not authorized by Event Handler Core System
-	 * @throws BadPayloadException when the payload couldn't be validated by Event Handler Core System 
-	 * @throws InvalidParameterException when the payload content couldn't be validated by Event Handler Core System
-	 * @throws ArrowheadException when internal server error happened at Event Handler Core System
-	 * @throws UnavailableServerException when Event Handler Core System is not available
-	 */
 	private void publishInitStartedEvent() {
 		logger.debug( "publishInitStartedEvent started..." );
 		
