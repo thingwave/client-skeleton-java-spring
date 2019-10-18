@@ -39,7 +39,10 @@ public class SubscriberController {
 		if( event.getEventType() == null) {
 			
 			logger.debug( "EventType is null." );
+
 		}
+		
+		//TODO implement your event handling logic here 
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -51,6 +54,8 @@ public class SubscriberController {
 			
 			logger.debug( "EventType is null." );
 		}
+		
+		//TODO implement your event handling logic here 
 	}
 	
 	//-------------------------------------------------------------------------------------------------
@@ -62,8 +67,10 @@ public class SubscriberController {
 			
 			logger.debug( "EventType is null." );
 		}
+		
+		//TODO implement your event handling logic here 
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	//TODO: implement here your provider related REST end points
+	//TODO: implement here additional subscriber related REST end points
 }
