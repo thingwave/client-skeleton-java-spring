@@ -169,7 +169,7 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 				
 				} catch (Exception ex) {
 					
-					logger.debug("Could not unsubscribe from EventType: " + eventType );
+					logger.debug("Exception happend in subscription initalization" + ex);
 				}
 				
 				try {
