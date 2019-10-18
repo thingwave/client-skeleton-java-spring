@@ -14,6 +14,7 @@ import eu.arrowhead.client.library.ArrowheadService;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
 import eu.arrowhead.client.skeleton.publisher.PublisherApplicationInitListener;
 import eu.arrowhead.client.skeleton.publisher.event.PresetEventType;
+import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.dto.shared.EventPublishRequestDTO;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
@@ -36,6 +37,9 @@ public class PublisherService {
 	
 	@Value(ClientCommonConstants.$CLIENT_SERVER_PORT_WD)
 	private int clientSystemPort;
+	
+	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
+	private boolean sslEnabled;
 	
 	@Autowired
 	ArrowheadService arrowheadService;
@@ -80,8 +84,9 @@ public class PublisherService {
 		source.setSystemName( clientSystemName );
 		source.setAddress( clientSystemAddress );
 		source.setPort( clientSystemPort );
-		source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
-		
+		if (sslEnabled) {
+			source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
+		}
 		return source;
 
 	}

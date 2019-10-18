@@ -23,6 +23,7 @@ import eu.arrowhead.client.library.config.ApplicationInitListener;
 import eu.arrowhead.client.library.util.ClientCommonConstants;
 import eu.arrowhead.client.skeleton.publisher.event.PresetEventType;
 import eu.arrowhead.client.skeleton.publisher.security.PublisherSecurityConfig;
+import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.core.CoreSystem;
 import eu.arrowhead.common.dto.shared.EventPublishRequestDTO;
@@ -44,6 +45,9 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 	@Value(ClientCommonConstants.$TOKEN_SECURITY_FILTER_ENABLED_WD)
 	private boolean tokenSecurityFilterEnabled;
 	
+	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
+	private boolean sslEnabled;
+	
 	@Value(ClientCommonConstants.$CLIENT_SYSTEM_NAME)
 	private String clientSystemName;
 	
@@ -64,7 +68,8 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
-		if (tokenSecurityFilterEnabled) {
+		
+		if (sslEnabled && tokenSecurityFilterEnabled) {
 			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
 
 			//Initialize Arrowhead Context
@@ -94,7 +99,7 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 
 	//-------------------------------------------------------------------------------------------------
 	private void setTokenSecurityFilter() {
-		if(!tokenSecurityFilterEnabled) {
+		if(!tokenSecurityFilterEnabled || !sslEnabled) {
 			logger.info("TokenSecurityFilter in not active");
 		} else {
 			final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
@@ -127,8 +132,12 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 		source.setSystemName( clientSystemName );
 		source.setAddress( clientSystemAddress );
 		source.setPort( clientSystemPort );
-		source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
-		
+		if (sslEnabled) {
+	
+			source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
+	
+		}
+
 		final Map<String,String> metadata = null;
 		
 		final String payload = "InitStarted";

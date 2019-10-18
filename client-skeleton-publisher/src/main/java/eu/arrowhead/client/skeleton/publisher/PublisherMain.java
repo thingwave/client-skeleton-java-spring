@@ -38,6 +38,9 @@ public class PublisherMain implements ApplicationRunner {
 	@Value(ClientCommonConstants.$CLIENT_SERVER_PORT_WD)
 	private int clientSystemPort;
 	
+	@Value(CommonConstants.$SERVER_SSL_ENABLED_WD)
+	private boolean sslEnabled;
+	
 	@Autowired
 	ArrowheadService arrowheadService;
 	
@@ -52,7 +55,7 @@ public class PublisherMain implements ApplicationRunner {
 	}
 
 	@Override
-	public void run(ApplicationArguments args) throws Exception {
+	public void run(final ApplicationArguments args) throws Exception {
 		logger.debug( "run started..." );
 		
 		publishRunStartedEvent();
@@ -73,8 +76,10 @@ public class PublisherMain implements ApplicationRunner {
 		source.setSystemName( clientSystemName );
 		source.setAddress( clientSystemAddress );
 		source.setPort( clientSystemPort );
-		source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
-		
+		if (sslEnabled) {
+			source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
+		}
+
 		final Map<String,String> metadata = null;
 		
 		final String payload = "RunStarted";
