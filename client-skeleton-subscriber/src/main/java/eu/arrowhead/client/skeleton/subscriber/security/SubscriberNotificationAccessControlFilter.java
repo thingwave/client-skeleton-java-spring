@@ -53,9 +53,9 @@ public class SubscriberNotificationAccessControlFilter extends ArrowheadFilter {
 					
 				if ( eventTypeMap != null) {
 					
-					for (final String notifacationUri  : eventTypeMap.values()) {
+					for (final String notificationUri  : eventTypeMap.values()) {
 						
-						if ( requestTarget.endsWith( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI + "/" + notifacationUri )) {
+						if ( requestTarget.endsWith( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI + "/" + notificationUri )) {
 							
 							checkIfClientIsAnAllowedCoreSystem( getCertificateCNFromRequest( httpRequest ), getServerCloudCN( serverCN ), allowedCoreSystemsForSendingNotification, requestTarget);
 
