@@ -25,6 +25,8 @@
 wrapper
 /client-skeleton-provider/target
 /client-skeleton-consumer/target
+/client-skeleton-publisher/target
+/client-skeleton-subscriber/target
 /mvnw
 /mvnw.cmd
 /.settings
@@ -32,3 +34,5 @@ wrapper
 /.metadata/
 
 *.log
+
+
