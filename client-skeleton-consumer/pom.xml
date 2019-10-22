@@ -4,7 +4,7 @@
 	<parent>
     	<groupId>eu.arrowhead</groupId>
     	<artifactId>client-skeleton</artifactId>
-    	<version>4.1.3.2</version>
+    	<version>4.1.3.3</version>
   	</parent>
 	
 	<artifactId>arrowhead-client-skeleton-consumer</artifactId>
