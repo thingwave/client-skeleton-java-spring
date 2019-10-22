@@ -1,5 +1,7 @@
 package eu.arrowhead.client.skeleton.consumer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -27,6 +29,8 @@ public class ConsumerMain implements ApplicationRunner {
 	
     @Autowired
 	private ArrowheadService arrowheadService;
+    
+	private final Logger logger = LogManager.getLogger( ConsumerMain.class );
     
     //=================================================================================================
 	// methods
@@ -64,6 +68,8 @@ public class ConsumerMain implements ApplicationRunner {
     	
     	if (response == null || response.getResponse().isEmpty()) {
     		//If no proper providers found during the orchestration process, then the response list will be empty. Handle the case as you wish!
+    		logger.debug("Orchestration response is empty");
+    		return;
     	}
     	
     	final OrchestrationResultDTO result = response.getResponse().get(0); //Simplest way of choosing a provider.
