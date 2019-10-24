@@ -81,11 +81,9 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 		setNotificationFilter();			
 
 		
-		if ( arrowheadService.echoCoreSystem( CoreSystem.EVENT_HANDLER ) ) {
-			
-			arrowheadService.updateCoreServiceURIs( CoreSystem.EVENT_HANDLER );	
-			subscribeToPresetEvents();
-			
+		if ( arrowheadService.echoCoreSystem(CoreSystem.EVENT_HANDLER)) {			
+			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENT_HANDLER);	
+			subscribeToPresetEvents();			
 		}
 		
 		//TODO: implement here any custom behavior on application start up
@@ -97,16 +95,11 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 	public void customDestroy() {
 		 
 		final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
-		if( eventTypeMap == null) {
-			
-			logger.info("No preset events to unsubscribe.");
-		
-		} else {
-			
-			for ( final String eventType : eventTypeMap.keySet() ) {
-				
-				arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
-				
+		if( eventTypeMap == null) {			
+			logger.info("No preset events to unsubscribe.");		
+		} else {			
+			for (final String eventType : eventTypeMap.keySet()) {				
+				arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);				
 			}
 		}
 	}
@@ -146,60 +139,44 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 		
 		final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
 		
-		if( eventTypeMap == null) {
-			
-			logger.info("No preset events to subscribe.");
-		
-		} else {
-			
+		if(eventTypeMap == null) {			
+			logger.info("No preset events to subscribe.");		
+		} else {			
 			final SystemRequestDTO subscriber = new SystemRequestDTO();
-			subscriber.setSystemName( clientSystemName );
-			subscriber.setAddress( clientSystemAddress );
-			subscriber.setPort( clientSystemPort );
-			if (sslEnabled) {
-				
-				subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );		
-	
+			subscriber.setSystemName(clientSystemName);
+			subscriber.setAddress(clientSystemAddress);
+			subscriber.setPort(clientSystemPort);
+			if (sslEnabled) {				
+				subscriber.setAuthenticationInfo(Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));	
 			}
-			for (final String eventType  : eventTypeMap.keySet()) {
-					
-				try {
-					
-					arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
-				
-				} catch (final Exception ex) {
-					
+			
+			for (final String eventType  : eventTypeMap.keySet()) {					
+				try {					
+					arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);				
+				} catch (final Exception ex) {					
 					logger.debug("Exception happend in subscription initalization " + ex);
 				}
 				
-				try {
-					
-					arrowheadService.subscribeToEventHandler( SubscriberUtilities.createSubscriptionRequestDTO( eventType, subscriber, eventTypeMap.get( eventType ) ) );
-				
-				} catch ( final InvalidParameterException ex) {
-					
-					if( ex.getMessage().contains( "Subscription violates uniqueConstraint rules" )) {
-						
+				try {					
+					arrowheadService.subscribeToEventHandler(SubscriberUtilities.createSubscriptionRequestDTO(eventType, subscriber, eventTypeMap.get(eventType)));				
+				} catch ( final InvalidParameterException ex) {					
+					if( ex.getMessage().contains("Subscription violates uniqueConstraint rules")) {						
 						logger.debug("Subscription is already in DB");
-					}
-					
-				} catch ( final Exception ex) {
-					
-					logger.debug("Could not subscribe to EventType: " + eventType );
+					}					
+				} catch (final Exception ex) {					
+					logger.debug("Could not subscribe to EventType: " + eventType);
 				} 
 			}
-
 		}
 	}
 	
 	//-------------------------------------------------------------------------------------------------
 	private void setNotificationFilter() {
-		logger.debug( "setNotificationFilter started..." );
+		logger.debug("setNotificationFilter started...");
 		
 		final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
 
 		subscriberSecurityConfig.getNotificationFilter().setEventTypeMap( eventTypeMap );
-		subscriberSecurityConfig.getNotificationFilter().setServerCN( arrowheadService.getServerCN() );
-		
+		subscriberSecurityConfig.getNotificationFilter().setServerCN(arrowheadService.getServerCN());		
 	}
 }

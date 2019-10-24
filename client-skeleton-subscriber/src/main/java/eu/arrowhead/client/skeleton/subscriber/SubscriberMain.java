@@ -63,9 +63,7 @@ public class SubscriberMain implements ApplicationRunner {
 
 	@Override
 	public void run(final ApplicationArguments args) throws Exception {
-
-		subscribeToPresetEvents();
-		
+		subscribeToPresetEvents();		
 	}
 	
 	//=================================================================================================
@@ -77,52 +75,36 @@ public class SubscriberMain implements ApplicationRunner {
 		
 		final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
 		
-		if( eventTypeMap == null) {
-			
-			logger.info("No preset events to subscribe.");
-		
+		if(eventTypeMap == null) {			
+			logger.info("No preset events to subscribe.");		
 		} else {
 			
 			final SystemRequestDTO subscriber = new SystemRequestDTO();
-			subscriber.setSystemName( clientSystemName );
-			subscriber.setAddress( clientSystemAddress );
-			subscriber.setPort( clientSystemPort );
+			subscriber.setSystemName(clientSystemName);
+			subscriber.setAddress(clientSystemAddress);
+			subscriber.setPort(clientSystemPort);
 			
-			if (sslEnabled) {
-				
-				subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()) );
-				
+			if (sslEnabled) {				
+				subscriber.setAuthenticationInfo( Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));				
 			}
 			
-			for (final String eventType  : eventTypeMap.keySet()) {
-					
-				try {
-					
-					arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);
-				
-				} catch (final Exception ex) {
-					
-					logger.debug("Could not unsubscribe from EventType: " + eventType );
+			for (final String eventType  : eventTypeMap.keySet()) {					
+				try {					
+					arrowheadService.unsubscribeFromEventHandler(eventType, clientSystemName, clientSystemAddress, clientSystemPort);				
+				} catch (final Exception ex) {					
+					logger.debug("Could not unsubscribe from EventType: " + eventType);
 				}
 				
-				try {
-					
-					arrowheadService.subscribeToEventHandler( SubscriberUtilities.createSubscriptionRequestDTO( eventType, subscriber, eventTypeMap.get( eventType ) ) );
-				
-				} catch ( final InvalidParameterException ex) {
-					
-					if( ex.getMessage().contains( "Subscription violates uniqueConstraint rules" )) {
-						
+				try {					
+					arrowheadService.subscribeToEventHandler(SubscriberUtilities.createSubscriptionRequestDTO( eventType, subscriber, eventTypeMap.get( eventType )));				
+				} catch (final InvalidParameterException ex) {					
+					if( ex.getMessage().contains("Subscription violates uniqueConstraint rules")) {						
 						logger.debug("Subscription is already in DB");
-					}
-					
-				} catch ( final Exception ex) {
-					
-					logger.debug("Could not subscribe to EventType: " + eventType );
+					}					
+				} catch (final Exception ex) {					
+					logger.debug("Could not subscribe to EventType: " + eventType);
 				} 
 			}
-
 		}
-	}
-	
+	}	
 }

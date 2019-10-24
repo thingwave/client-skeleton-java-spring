@@ -14,7 +14,7 @@ import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.dto.shared.EventDTO;
 
 @RestController
-@RequestMapping( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI)
+@RequestMapping(SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI)
 public class SubscriberController {
 	
 	//=================================================================================================
@@ -36,10 +36,8 @@ public class SubscriberController {
 	public void receivePublisherReceivedRequestEvent(@RequestBody final EventDTO event ) {	
 		logger.debug("receivePublisherReceivedRequestEvent started...");
 		
-		if( event.getEventType() == null) {
-			
-			logger.debug( "EventType is null." );
-
+		if( event.getEventType() == null) {			
+			logger.debug("EventType is null.");
 		}
 		
 		//TODO implement your event handling logic here 
@@ -47,12 +45,11 @@ public class SubscriberController {
 	
 	//-------------------------------------------------------------------------------------------------
 	@PostMapping(path = SubscriberConstants.START_INIT_NOTIFICATION_URI) 
-	public void receivePublsisherStartedInitEvent(@RequestBody final EventDTO event ) {
+	public void receivePublsisherStartedInitEvent(@RequestBody final EventDTO event) {
 		logger.debug("receivePublsisherStartedInitEvent started... ");
 		
-		if( event.getEventType() == null) {
-			
-			logger.debug( "EventType is null." );
+		if( event.getEventType() == null) {			
+			logger.debug("EventType is null.");
 		}
 		
 		//TODO implement your event handling logic here 
@@ -63,9 +60,8 @@ public class SubscriberController {
 	public void receivePublsisherStartedRunEvent(@RequestBody final EventDTO event ) {
 		logger.debug("receivePublsisherStartedRunEvent started... ");
 		
-		if( event.getEventType() == null) {
-			
-			logger.debug( "EventType is null." );
+		if( event.getEventType() == null) {			
+			logger.debug("EventType is null.");
 		}
 		
 		//TODO implement your event handling logic here 
