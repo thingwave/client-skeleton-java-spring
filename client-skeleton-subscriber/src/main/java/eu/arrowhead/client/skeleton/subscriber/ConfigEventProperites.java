@@ -23,5 +23,4 @@ public class ConfigEventProperites {
 
 	public Map<String, String> getEventTypeURIMap() { return eventTypeURIMap; }
 	public void setEventTypeURIMap(final Map<String, String> eventTypeURIMap) { this.eventTypeURIMap = eventTypeURIMap; }
-
 }

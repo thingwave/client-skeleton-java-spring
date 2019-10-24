@@ -51,24 +51,17 @@ public class SubscriberNotificationAccessControlFilter extends ArrowheadFilter {
 				final HttpServletRequest httpRequest = (HttpServletRequest) request;
 				final String requestTarget = Utilities.stripEndSlash(httpRequest.getRequestURL().toString());
 					
-				if ( eventTypeMap != null) {
-					
-					for (final String notificationUri  : eventTypeMap.values()) {
-						
-						if ( requestTarget.endsWith( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI + "/" + notificationUri )) {
-							
-							checkIfClientIsAnAllowedCoreSystem( getCertificateCNFromRequest( httpRequest ), getServerCloudCN( serverCN ), allowedCoreSystemsForSendingNotification, requestTarget);
-
+				if (eventTypeMap != null) {					
+					for (final String notificationUri : eventTypeMap.values()) {						
+						if (requestTarget.endsWith( SubscriberDefaults.DEFAULT_EVENT_NOTIFICATION_BASE_URI + "/" + notificationUri )) {							
+							checkIfClientIsAnAllowedCoreSystem(getCertificateCNFromRequest(httpRequest), getServerCloudCN(serverCN), allowedCoreSystemsForSendingNotification, requestTarget);
 						}
 					}
 				}
-	
-
 			} catch (final ArrowheadException ex) {
 				handleException(ex, response);
 			}
-		}
-		
+		}		
 		chain.doFilter(request, response);
 	}
 	
@@ -114,6 +107,5 @@ public class SubscriberNotificationAccessControlFilter extends ArrowheadFilter {
 	    Assert.isTrue(serverFields.length >= 2, "Server common name is invalid: " + serverCN);
 	    
 	    return serverFields[1];
-	}
-	
+	}	
 }

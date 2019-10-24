@@ -31,9 +31,9 @@ public class PublisherController {
 	//-------------------------------------------------------------------------------------------------
 	@GetMapping(path = CommonConstants.ECHO_URI)
 	public String echoService() {
-		logger.debug( "echoService started..." );
+		logger.debug("echoService started...");
 		
-		publisherService.publish( PresetEventType.REQUEST_RECEIVED, Map.of( EventTypeConstants.EVENT_TYPE_REQUEST_RECEIVED_METADATA_REQUEST_TYPE, HttpMethod.GET.name() ), CommonConstants.ECHO_URI);
+		publisherService.publish(PresetEventType.REQUEST_RECEIVED, Map.of( EventTypeConstants.EVENT_TYPE_REQUEST_RECEIVED_METADATA_REQUEST_TYPE, HttpMethod.GET.name() ), CommonConstants.ECHO_URI);
 		
 		return "Got it!";
 	}

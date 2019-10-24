@@ -34,7 +34,7 @@ Each client skeleton has a default 'ApplicationInitListener' and a default 'Secu
 ##### (1st) apllicaction.properties
 Location: `src/main/resources`
 * Decide the required security level and set the `server.ssl.enabled` and `token.security.filter.enabled` properties accordingly.
-* Create your own client certificate (or for demo purpose use the provided one) and update the further `server.ssl...` properties accordingly. *(**Note** that `server.ssl.key-store-password` and `server.ssl.key-password` must be the same.)*
+* [Create](https://github.com/arrowhead-f/core-java-spring#certificates) your own client certificate (or for demo purpose use the provided one) and update the further `server.ssl...` properties accordingly. *(**Note** that `server.ssl.key-store-password` and `server.ssl.key-password` must be the same.)*
 * Change the `client_system_name` property to your system name. *(**Note** that it should be in line with your certificate common name e.g.: when your certificate common name is `my_awesome_client.my_cloud.my_company.arrowhed.eu`, then your system name is  `my_awesome_client`)*
 * Adjust the Service Registry Core System location by the `sr_address` and `sr_port` properties.
 * In case of a provider you have to set its web-server parameters by the `server.address` and `server.port` properties.

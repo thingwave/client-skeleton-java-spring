@@ -57,10 +57,8 @@ public class PublisherMain implements ApplicationRunner {
 
 	@Override
 	public void run(final ApplicationArguments args) throws Exception {
-		logger.debug( "run started..." );
-		
-		publishRunStartedEvent();
-		
+		logger.debug("run started...");		
+		publishRunStartedEvent();		
 	}
 	
 	//=================================================================================================
@@ -74,28 +72,18 @@ public class PublisherMain implements ApplicationRunner {
 		final String eventType = PresetEventType.START_RUN.getEventTypeName();
 		
 		final SystemRequestDTO source = new SystemRequestDTO();
-		source.setSystemName( clientSystemName );
-		source.setAddress( clientSystemAddress );
-		source.setPort( clientSystemPort );
+		source.setSystemName(clientSystemName);
+		source.setAddress(clientSystemAddress);
+		source.setPort(clientSystemPort);
 		if (sslEnabled) {
-			source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
+			source.setAuthenticationInfo(Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded()));
 		}
 
-		final Map<String,String> metadata = null;
+		final Map<String,String> metadata = null;		
+		final String payload = PublisherConstants.START_RUN_EVENT_PAYLOAD;		
+		final String timeStamp = Utilities.convertZonedDateTimeToUTCString(ZonedDateTime.now());		
+		final EventPublishRequestDTO publishRequestDTO = new EventPublishRequestDTO(eventType, source, metadata, payload, timeStamp);
 		
-		final String payload = PublisherConstants.START_RUN_EVENT_PAYLOAD;
-		
-		final String timeStamp = Utilities.convertZonedDateTimeToUTCString( ZonedDateTime.now() );
-		
-		final EventPublishRequestDTO publishRequestDTO = new EventPublishRequestDTO(
-				eventType, 
-				source, 
-				metadata, 
-				payload, 
-				timeStamp);
-		
-		arrowheadService.publishToEventHandler( publishRequestDTO );
-				
-	}
-	
+		arrowheadService.publishToEventHandler(publishRequestDTO);				
+	}	
 }

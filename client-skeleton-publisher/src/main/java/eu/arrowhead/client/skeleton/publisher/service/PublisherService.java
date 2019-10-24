@@ -18,11 +18,6 @@ import eu.arrowhead.common.CommonConstants;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.dto.shared.EventPublishRequestDTO;
 import eu.arrowhead.common.dto.shared.SystemRequestDTO;
-import eu.arrowhead.common.exception.ArrowheadException;
-import eu.arrowhead.common.exception.AuthException;
-import eu.arrowhead.common.exception.BadPayloadException;
-import eu.arrowhead.common.exception.InvalidParameterException;
-import eu.arrowhead.common.exception.UnavailableServerException;
 
 @Service
 public class PublisherService {
@@ -51,10 +46,10 @@ public class PublisherService {
 
 	//-------------------------------------------------------------------------------------------------
 	//Sample implementation of event publishing of preset event types
-	public void publish( final PresetEventType eventType, final Map<String, String> metadata, final String payload ) {
+	public void publish(final PresetEventType eventType, final Map<String, String> metadata, final String payload) {
 		
-		final EventPublishRequestDTO request = getPublishRequest( eventType, metadata, payload );
-		arrowheadService.publishToEventHandler( request );
+		final EventPublishRequestDTO request = getPublishRequest(eventType, metadata, payload);
+		arrowheadService.publishToEventHandler(request);
 	}
 	
 	//=================================================================================================
@@ -62,34 +57,25 @@ public class PublisherService {
 
 	//-------------------------------------------------------------------------------------------------
 	private EventPublishRequestDTO getPublishRequest(final PresetEventType eventType, final Map<String, String> metadata, final String payload) {
-		logger.debug( "getPublishRequest started..." );
+		logger.debug("getPublishRequest started...");
 		
-		final String timeStamp = Utilities.convertZonedDateTimeToUTCString( ZonedDateTime.now() );
-		
-		final EventPublishRequestDTO publishRequestDTO = new EventPublishRequestDTO(
-				eventType.getEventTypeName(), 
-				getSource(), 
-				metadata, 
-				payload, 
-				timeStamp);
-		
+		final String timeStamp = Utilities.convertZonedDateTimeToUTCString(ZonedDateTime.now());		
+		final EventPublishRequestDTO publishRequestDTO = new EventPublishRequestDTO(eventType.getEventTypeName(), getSource(), metadata, payload, timeStamp);		
 		return publishRequestDTO;
 	}
 
 	//-------------------------------------------------------------------------------------------------
 	private SystemRequestDTO getSource() {
-		logger.debug( "getSource started..." );
+		logger.debug("getSource started...");
 		
 		final SystemRequestDTO source = new SystemRequestDTO();
-		source.setSystemName( clientSystemName );
-		source.setAddress( clientSystemAddress );
-		source.setPort( clientSystemPort );
+		source.setSystemName(clientSystemName);
+		source.setAddress(clientSystemAddress);
+		source.setPort(clientSystemPort);
 		if (sslEnabled) {
-			source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
+			source.setAuthenticationInfo( Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 		}
+		
 		return source;
-
-	}
-	
-	
+	}	
 }

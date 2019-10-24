@@ -79,9 +79,9 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 		
 		setTokenSecurityFilter();
 		
-		if ( arrowheadService.echoCoreSystem( CoreSystem.EVENT_HANDLER ) ) {
+		if ( arrowheadService.echoCoreSystem(CoreSystem.EVENT_HANDLER) ) {
 			
-			arrowheadService.updateCoreServiceURIs( CoreSystem.EVENT_HANDLER );	
+			arrowheadService.updateCoreServiceURIs(CoreSystem.EVENT_HANDLER);	
 			
 			publishInitStartedEvent();
 		}
@@ -130,30 +130,18 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 		final String eventType = PresetEventType.START_INIT.getEventTypeName();
 		
 		final SystemRequestDTO source = new SystemRequestDTO();
-		source.setSystemName( clientSystemName );
-		source.setAddress( clientSystemAddress );
-		source.setPort( clientSystemPort );
-		if (sslEnabled) {
-	
-			source.setAuthenticationInfo( Base64.getEncoder().encodeToString( arrowheadService.getMyPublicKey().getEncoded() ) );
-	
+		source.setSystemName(clientSystemName);
+		source.setAddress(clientSystemAddress);
+		source.setPort(clientSystemPort);
+		if (sslEnabled) {	
+			source.setAuthenticationInfo( Base64.getEncoder().encodeToString(arrowheadService.getMyPublicKey().getEncoded()));
 		}
 
-		final Map<String,String> metadata = null;
+		final Map<String,String> metadata = null;		
+		final String payload = PublisherConstants.START_INIT_EVENT_PAYLOAD;		
+		final String timeStamp = Utilities.convertZonedDateTimeToUTCString(ZonedDateTime.now());		
+		final EventPublishRequestDTO publishRequestDTO = new EventPublishRequestDTO(eventType, source, metadata, payload, timeStamp);
 		
-		final String payload = PublisherConstants.START_INIT_EVENT_PAYLOAD;
-		
-		final String timeStamp = Utilities.convertZonedDateTimeToUTCString( ZonedDateTime.now() );
-		
-		final EventPublishRequestDTO publishRequestDTO = new EventPublishRequestDTO(
-				eventType, 
-				source, 
-				metadata, 
-				payload, 
-				timeStamp);
-		
-		arrowheadService.publishToEventHandler( publishRequestDTO );
-				
+		arrowheadService.publishToEventHandler(publishRequestDTO);				
 	}
-
 }
