@@ -31,7 +31,7 @@ Each client skeleton has a default 'ApplicationInitListener' and a default 'Secu
 
 ### Best practices to start with the skeletons
 
-##### (1st) apllicaction.properties
+##### (1st) apllication.properties
 Location: `src/main/resources`
 * Decide the required security level and set the `server.ssl.enabled` and `token.security.filter.enabled` properties accordingly.
 * [Create](https://github.com/arrowhead-f/core-java-spring#certificates) your own client certificate (or for demo purpose use the provided one) and update the further `server.ssl...` properties accordingly. *(**Note** that `server.ssl.key-store-password` and `server.ssl.key-password` must be the same.)*
@@ -97,7 +97,7 @@ Already implemented Subscriber start-up logics:
 * Setting eventTypeMap field of token security filter.
 * Turning on the token security filter if it is enabled.
 * Turning on the notification filter.
-* Subscribing to the event types defined in apllicaction.properties.
+* Subscribing to the event types defined in apllication.properties.
 
 #### Recommended Subscriber start-up order
 * Register Subscriber system in Service Registry (through swagger)
@@ -105,6 +105,6 @@ Already implemented Subscriber start-up logics:
 * Start Subscriber (subscribe to events)
 
 Already implemented Subscriber shutdown logics:
-* Unsubscribing from the event types defined in apllicaction.properties.
+* Unsubscribing from the event types defined in apllication.properties.
 
 ##### Check [`sos-examples-spring`](https://github.com/arrowhead-f/sos-examples-spring) repository for full demo client implementations.
