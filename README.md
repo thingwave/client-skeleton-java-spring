@@ -99,6 +99,11 @@ Already implemented Subscriber start-up logics:
 * Turning on the notification filter.
 * Subscribing to the event types defined in apllicaction.properties.
 
+Recommended Subscriber start-up order:
+* Register Subscriber system in Service Registry (trough swagger)
+* Authorize Subscriber to Publisher in Authorization (trough swagger)
+* Start Subscriber (subcribe to events)
+
 Already implemented Subscriber shutdown logics:
 * Unsubscribing from the event types defined in apllicaction.properties.
 
