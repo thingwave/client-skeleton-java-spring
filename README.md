@@ -102,7 +102,7 @@ Already implemented Subscriber start-up logics:
 #### Recommended Subscriber start-up order
 * Register Subscriber system in Service Registry (through swagger)
 * Authorize Subscriber to Publisher in Authorization (through swagger)
-* Start Subscriber (subcribe to events)
+* Start Subscriber (subscribe to events)
 
 Already implemented Subscriber shutdown logics:
 * Unsubscribing from the event types defined in apllicaction.properties.
