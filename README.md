@@ -64,24 +64,24 @@ The skeletons provide a built-in arrowhed framework compatible security configur
 The skeletons provide a built-in application start-up and shutdown configuration located in `eu.arrowhead.client.skeleton.consumer|provider` package.
 The `ConsumerApplicationInitListener.class`, the `ProviderApplicationInitListener.class`, `PublisherApplicationInitListener.class` and the `SubscriberApplicationInitListener.class` contains the `customInit()` method which is executed automatically right after the application start-up and also the `customDestroy()` method which is executed automatically right after triggering the application shutdown, but still before the final stop. *(**Look for the 'TODO' marks** within these classes if you want to implement additional logic.)*
 
-Already implemented Consumer start-up logic:
+###### Already implemented Consumer start-up logic:
 * Checking the Service Registry Core System reachability. *(Sends an 'echo' request to the server.)*
 * Checking the Orchestrator Core System reachability. *(Sends an 'echo' request to the server.)*
 * Querying and storing the public service URIs of Orchestrator Core System. *(Sends 'query' requests to the Service Registry.)*
 
-Already implemented Provider start-up logic:
+###### Already implemented Provider start-up logic:
 * Checking the Service Registry Core System reachability. *(Sends an 'echo' request to the server.)*
 * Checking the Authorization Core System reachability if 'TokenSecurityFilter' enabled. *(Sends an 'echo' request to the server.)*
 * Querying and storing the 'public-key' service URI of Authorization Core System if token security filter is enabled. *(Sends a 'query' request to the Service Registry.)*
 * Turning on the token security filter if it is enabled.
 
-Recommended Provider start-up logics:
+###### Recommended Provider start-up logics:
 * Registering the provided service into the Service Registry Core System. *(**Hint:** Use the `forceRegisterServiceToServiceRegistry()` method from `ArrowheadService.class`. It removes your current service registry entry from the database and registers again, so it ensures that if your service interfaces or the metadata have been changed, then the freshest condition will be published.)*
 
-Recommended Provider shutdown logic:
+###### Recommended Provider shutdown logic:
 * Unregistering the service from Service Registry Core System. *(**Hint:** Use the `unregisterServiceFromServiceRegistry()` method from `ArrowheadService.class`.)*
 
-Already implemented Publisher start-up logics:
+###### Already implemented Publisher start-up logics:
 * Checking the Service Registry Core System reachability. *(Sends an 'echo' request to the server.)*
 * Checking the Authorization Core System reachability if 'TokenSecurityFilter' enabled. *(Sends an 'echo' request to the server.)*
 * Checking the Event Handler Core System reachability. *(Sends an 'echo' request to the server.)*
@@ -89,7 +89,7 @@ Already implemented Publisher start-up logics:
 * Turning on the token security filter if it is enabled.
 * Publishing an event with `START_INIT` event type and `"InitStarted"` payload when the start-up is successful.
 
-Already implemented Subscriber start-up logics:
+###### Already implemented Subscriber start-up logics:
 * Checking the Service Registry Core System reachability. *(Sends an 'echo' request to the server.)*
 * Checking the Authorization Core System reachability if 'TokenSecurityFilter' enabled. *(Sends an 'echo' request to the server.)*
 * Checking the Event Handler Core System reachability. *(Sends an 'echo' request to the server.)*
@@ -99,12 +99,12 @@ Already implemented Subscriber start-up logics:
 * Turning on the notification filter.
 * Subscribing to the event types defined in apllication.properties.
 
-#### Recommended Subscriber start-up order
+###### Recommended Subscriber start-up order
 * Register Subscriber system in Service Registry (through swagger)
 * Authorize Subscriber to Publisher in Authorization (through swagger)
 * Start Subscriber (subscribe to events)
 
-Already implemented Subscriber shutdown logics:
+###### Already implemented Subscriber shutdown logics:
 * Unsubscribing from the event types defined in apllication.properties.
 
 ##### Check [`sos-examples-spring`](https://github.com/arrowhead-f/sos-examples-spring) repository for full demo client implementations.
