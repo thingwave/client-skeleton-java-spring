@@ -109,9 +109,7 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 
 	//-------------------------------------------------------------------------------------------------
 	private void setTokenSecurityFilter() {
-		if(!tokenSecurityFilterEnabled || !sslEnabled) {
-			logger.info("TokenSecurityFilter in not active");
-		} else {
+		if(tokenSecurityFilterEnabled) {
 			final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
 			if (authorizationPublicKey == null) {
 				throw new ArrowheadException("Authorization public key is null");
@@ -125,12 +123,14 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 				throw new ArrowheadException(ex.getMessage());
 			}			
 			final PrivateKey subscriberPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
-
+			
 			final Map<String, String> eventTypeMap = configEventProperites.getEventTypeURIMap();
-
+			
 			subscriberSecurityConfig.getTokenSecurityFilter().setEventTypeMap( eventTypeMap );
 			subscriberSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
 			subscriberSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(subscriberPrivateKey);
+		} else {
+			logger.info("TokenSecurityFilter in not active");
 		}
 	}
 

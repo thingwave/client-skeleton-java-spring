@@ -100,9 +100,7 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 
 	//-------------------------------------------------------------------------------------------------
 	private void setTokenSecurityFilter() {
-		if(!tokenSecurityFilterEnabled || !sslEnabled) {
-			logger.info("TokenSecurityFilter in not active");
-		} else {
+		if(tokenSecurityFilterEnabled) {
 			final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
 			if (authorizationPublicKey == null) {
 				throw new ArrowheadException("Authorization public key is null");
@@ -116,9 +114,11 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 				throw new ArrowheadException(ex.getMessage());
 			}			
 			final PrivateKey publisherPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
-
+			
 			publisherSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
 			publisherSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(publisherPrivateKey);
+		} else {
+			logger.info("TokenSecurityFilter in not active");
 		}
 	}
 
