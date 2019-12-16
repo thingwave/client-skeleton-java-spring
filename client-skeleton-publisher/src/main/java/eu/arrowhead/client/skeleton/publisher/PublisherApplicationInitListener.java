@@ -75,9 +75,12 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 
 			//Initialize Arrowhead Context
 			arrowheadService.updateCoreServiceURIs(CoreSystem.AUTHORIZATION);			
-		}		
 		
-		setTokenSecurityFilter();
+			setTokenSecurityFilter();
+		
+		}else {
+			logger.info("TokenSecurityFilter in not active");
+		}
 		
 		if ( arrowheadService.echoCoreSystem(CoreSystem.EVENT_HANDLER) ) {
 			
@@ -100,26 +103,23 @@ public class PublisherApplicationInitListener extends ApplicationInitListener {
 
 	//-------------------------------------------------------------------------------------------------
 	private void setTokenSecurityFilter() {
-		if(tokenSecurityFilterEnabled) {
-			final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
-			if (authorizationPublicKey == null) {
-				throw new ArrowheadException("Authorization public key is null");
-			}
-			
-			KeyStore keystore;
-			try {
-				keystore = KeyStore.getInstance(sslProperties.getKeyStoreType());
-				keystore.load(sslProperties.getKeyStore().getInputStream(), sslProperties.getKeyStorePassword().toCharArray());
-			} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
-				throw new ArrowheadException(ex.getMessage());
-			}			
-			final PrivateKey publisherPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
-			
-			publisherSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
-			publisherSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(publisherPrivateKey);
-		} else {
-			logger.info("TokenSecurityFilter in not active");
+
+		final PublicKey authorizationPublicKey = arrowheadService.queryAuthorizationPublicKey();
+		if (authorizationPublicKey == null) {
+			throw new ArrowheadException("Authorization public key is null");
 		}
+		
+		KeyStore keystore;
+		try {
+			keystore = KeyStore.getInstance(sslProperties.getKeyStoreType());
+			keystore.load(sslProperties.getKeyStore().getInputStream(), sslProperties.getKeyStorePassword().toCharArray());
+		} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException ex) {
+			throw new ArrowheadException(ex.getMessage());
+		}			
+		final PrivateKey publisherPrivateKey = Utilities.getPrivateKey(keystore, sslProperties.getKeyPassword());
+		
+		publisherSecurityConfig.getTokenSecurityFilter().setAuthorizationPublicKey(authorizationPublicKey);
+		publisherSecurityConfig.getTokenSecurityFilter().setMyPrivateKey(publisherPrivateKey);
 	}
 
 	//-------------------------------------------------------------------------------------------------	
