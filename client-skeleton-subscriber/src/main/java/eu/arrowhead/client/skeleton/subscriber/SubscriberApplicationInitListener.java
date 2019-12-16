@@ -69,6 +69,10 @@ public class SubscriberApplicationInitListener extends ApplicationInitListener {
 
 		//Checking the availability of necessary core systems
 		checkCoreSystemReachability(CoreSystem.SERVICE_REGISTRY);
+		
+		checkCoreSystemReachability(CoreSystem.ORCHESTRATOR);
+		arrowheadService.updateCoreServiceURIs(CoreSystem.ORCHESTRATOR);
+		
 		if (sslEnabled && tokenSecurityFilterEnabled) {
 			checkCoreSystemReachability(CoreSystem.AUTHORIZATION);			
 
