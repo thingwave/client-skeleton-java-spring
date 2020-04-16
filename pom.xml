@@ -22,13 +22,6 @@
 	     	<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 	   </license>
   	</licenses>
-  	
-  	<repositories>
-		<repository>
-			<id>arrowhead-client</id>
-			<url>https://github.com/arrowhead-f/client-library-java-spring/raw/master/client-mvn-repo</url>
-		</repository>
-	</repositories>
 	
 	<modules>
 	    <module>client-skeleton-consumer</module>
@@ -41,7 +34,7 @@
 		<dependency>
 			<groupId>eu.arrowhead</groupId>
 			<artifactId>client-library</artifactId>
-			<version>4.1.3.6</version>
+			<version>4.1.3.8</version>
 		</dependency>		
 	</dependencies>
 	
