@@ -31,7 +31,7 @@ Each client skeleton has a default 'ApplicationInitListener' and a default 'Secu
 
 ### Best practices to start with the skeletons
 
-##### (1st) apllication.properties
+##### (1st) application.properties
 Location: `src/main/resources`
 * Decide the required security level and set the `server.ssl.enabled` and `token.security.filter.enabled` properties accordingly.
 * [Create](https://github.com/arrowhead-f/core-java-spring#certificates) your own client certificate (or for demo purpose use the provided one) and update the further `server.ssl...` properties accordingly. *(**Note** that `server.ssl.key-store-password` and `server.ssl.key-password` must be the same.)*
