@@ -26,6 +26,7 @@
 	<modules>
 	    <module>client-skeleton-consumer</module>
 	    <module>client-skeleton-provider</module>
+	    <module>client-rpi-provider</module>
 	    <module>client-skeleton-subscriber</module>
 	    <module>client-skeleton-publisher</module>
   	</modules>
