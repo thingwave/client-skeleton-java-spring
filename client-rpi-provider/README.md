@@ -8,7 +8,7 @@ Please be aware, that this application is ONLY comptible with Arrowhead Framewor
 ## Table of Contents
 1. [Quick Start Guide](#quickstart)
 2. [Documentation](#documentation)  
-    1. [GPIO Controller](#gpiocontroller)
+   1. [GPIO Controller](#gpiocontroller)
        * [System Design Description Overview](#gpiocontroller_sdd)
        * [Services and Use Cases](#gpiocontroller_usecases)
        * [Security](#gpiocontroller_security)
@@ -16,5 +16,7 @@ Please be aware, that this application is ONLY comptible with Arrowhead Framewor
            * [Client](#sgpiocontroller_endpoints_client)
 
 <a name="documentation" />
+# Documentation 
 
 <a name="gpiocontroller" />
+## GPIOController 
