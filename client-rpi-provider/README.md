@@ -8,11 +8,11 @@ Please be aware, that this application is ONLY comptible with Arrowhead Framewor
 ## Table of Contents
 1. [Quick Start Guide](#quickstart)
 2. [Documentation](#documentation) 
-    1. [Service Registry](#serviceregistry)
-       * [System Design Description Overview](#serviceregistry_sdd)
-       * [Services and Use Cases](#serviceregistry_usecases)
-       * [Security](#serviceregistry_security)
-       * [Endpoints](#serviceregistry_endpoints)
-           * [Client](#serviceregistry_endpoints_client)
+    1. [GPIO Controller](#gpiocontroller)
+       * [System Design Description Overview](#gpiocontroller_sdd)
+       * [Services and Use Cases](#gpiocontroller_usecases)
+       * [Security](#gpiocontroller_security)
+       * [Endpoints](#gpiocontroller_endpoints)
+           * [Client](#sgpiocontroller_endpoints_client)
 
 <a name="gpiocontroller" />
