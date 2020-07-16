@@ -6,8 +6,10 @@ This module provides a generic GPIO controller implemented as an Arrowhead GPIOC
 Please be aware, that this application is ONLY comptible with Arrowhead Framework version 4.1.3.
 
 
-## [GPIOController]
+## [GPIOController] (#gpiocontroller)
     * [System Design Description Overview](#gpiocontroller_sdd)
     * [Services and Use Cases](#gpiocontroller_usecases)  
     * [Endpoints](#gpiocontroller_endpoints)
         * [Client](#gpiocontroller_endpoints_client)
+
+<a name="gpiocontroller" />
