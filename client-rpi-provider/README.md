@@ -7,7 +7,7 @@ Please be aware, that this application is ONLY comptible with Arrowhead Framewor
 
 
 ## [GPIOController]
-      * [System Design Description Overview](#gpiocontroller_sdd)
-      * [Services and Use Cases](#gpiocontroller_usecases)  
-      * [Endpoints](#gpiocontroller_endpoints)
-            * [Client](#gpiocontroller_endpoints_client)
+    * [System Design Description Overview](#gpiocontroller_sdd)
+    * [Services and Use Cases](#gpiocontroller_usecases)  
+    * [Endpoints](#gpiocontroller_endpoints)
+        * [Client](#gpiocontroller_endpoints_client)
