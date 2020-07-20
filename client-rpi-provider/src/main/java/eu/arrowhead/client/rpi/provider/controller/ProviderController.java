@@ -1,6 +1,7 @@
 package eu.arrowhead.client.rpi.provider.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import eu.arrowhead.common.CommonConstants;
@@ -39,5 +40,13 @@ public class ProviderController {
 	}
 	
 	//-------------------------------------------------------------------------------------------------
-	//TODO: implement here your provider related REST end points
+	@GetMapping(path = "/pins")
+	public String pinServiceGet() {
+		return "[]";
+	}
+
+	@PutMapping(path = "/pins")
+	public String pinServicePut() {
+		return "Put pins!";
+	}
 }
